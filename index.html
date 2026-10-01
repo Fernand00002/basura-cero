@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Basura Cero</title>
-  <meta name="description" content="Aplicación municipal y comunitaria para registro de tren de aseo, alertas preventivas y reportes ciudadanos de basura." />
+  <meta name="description" content="Aplicación municipal y comunitaria para registro de tren de aseo, alertas preventivas, reportes ciudadanos y triaje con IA Gemini." />
   <meta property="og:title" content="Basura Cero" />
-  <meta property="og:description" content="Aplicación municipal y comunitaria para registro de tren de aseo, alertas preventivas y reportes ciudadanos de basura." />
+  <meta property="og:description" content="Aplicación municipal y comunitaria para registro de tren de aseo, alertas preventivas, reportes ciudadanos y triaje con IA Gemini." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
@@ -35,6 +35,27 @@
       --danger-light: #fee2e2;
       --danger-border: #f87171;
 
+      /* M5: Paleta de badges de prioridad del Sello de IA */
+      --priority-baja-bg: #dcfce7;
+      --priority-baja-text: #166534;
+      --priority-baja-border: #86efac;
+
+      --priority-media-bg: #fef9c3;
+      --priority-media-text: #854d0e;
+      --priority-media-border: #fde047;
+
+      --priority-alta-bg: #ffedd5;
+      --priority-alta-text: #9a3412;
+      --priority-alta-border: #fdba74;
+
+      --priority-critica-bg: #fee2e2;
+      --priority-critica-text: #991b1b;
+      --priority-critica-border: #fca5a5;
+
+      --priority-offline-bg: #f1f5f9;
+      --priority-offline-text: #475569;
+      --priority-offline-border: #cbd5e1;
+
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -59,13 +80,13 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding-bottom: 90px; /* Margen inferior para que la barra móvil no tape contenido */
+      padding-bottom: 90px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* M3: Contenedor 100% fluido desde 320px de ancho y cómodo para uso con una sola mano */
+    /* M3: Contenedor fluido desde 320px de ancho y cómodo para uso con una sola mano */
     .app-container {
       width: 100%;
       max-width: 520px;
@@ -103,7 +124,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      min-width: 0; /* Previene desbordamiento en pantallas de 320px */
+      min-width: 0;
     }
 
     .brand-icon {
@@ -275,7 +296,6 @@
       }
     }
 
-    /* Variante Destacada: Mañana pasa el tren (Amarillo / Naranja brillante) */
     .alert-banner.alert-warning {
       background: var(--alert-warning-bg);
       border: 2.5px solid var(--alert-warning-border);
@@ -283,7 +303,6 @@
       box-shadow: 0 10px 25px -4px var(--alert-warning-glow), 0 4px 6px -2px rgba(245, 158, 11, 0.2);
     }
 
-    /* Variante: Día de Recolección Hoy (Verde activo) */
     .alert-banner.alert-today {
       background: var(--alert-today-bg);
       border: 2.5px solid var(--alert-today-border);
@@ -291,7 +310,6 @@
       box-shadow: 0 8px 18px -3px rgba(16, 185, 129, 0.2);
     }
 
-    /* Variante: Días Faltantes Normales (Pizarra suave) */
     .alert-banner.alert-info {
       background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
       border: 1.5px solid #cbd5e1;
@@ -429,6 +447,45 @@
       margin-bottom: 12px;
     }
 
+    /* M5: Configuración de la API Key de Gemini */
+    .gemini-config-card {
+      background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%);
+      border: 1.5px solid #99f6e4;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .gemini-config-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .gemini-config-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #115e59;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .gemini-config-body {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #99f6e4;
+    }
+
+    .gemini-key-input-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
     /* M4: CAJA DE ALERTA DE ERROR ACCESIBLE EN ROJO */
     .error-alert-box {
       background: var(--danger-light);
@@ -524,7 +581,7 @@
       color: var(--text);
       background: #ffffff;
       outline: none;
-      min-height: 44px; /* Ergonomía táctil para una mano */
+      min-height: 44px;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
@@ -604,7 +661,7 @@
       cursor: pointer;
       transition: all 0.15s ease;
       width: 100%;
-      min-height: 46px; /* Cómodo para usar con una mano */
+      min-height: 46px;
     }
 
     .btn:active:not(:disabled) {
@@ -848,6 +905,84 @@
       margin-bottom: 10px;
     }
 
+    /* M5: SECCIÓN DEL SELLO DE IA EN LA TARJETA */
+    .report-ai-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .ai-label-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0f766e;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .priority-badge {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .priority-baja {
+      background: var(--priority-baja-bg);
+      color: var(--priority-baja-text);
+      border: 1px solid var(--priority-baja-border);
+    }
+
+    .priority-media {
+      background: var(--priority-media-bg);
+      color: var(--priority-media-text);
+      border: 1px solid var(--priority-media-border);
+    }
+
+    .priority-alta {
+      background: var(--priority-alta-bg);
+      color: var(--priority-alta-text);
+      border: 1px solid var(--priority-alta-border);
+    }
+
+    .priority-critica {
+      background: var(--priority-critica-bg);
+      color: var(--priority-critica-text);
+      border: 1px solid var(--priority-critica-border);
+    }
+
+    .priority-offline {
+      background: var(--priority-offline-bg);
+      color: var(--priority-offline-text);
+      border: 1px solid var(--priority-offline-border);
+    }
+
+    .report-ai-recom {
+      background: #f0fdfa;
+      border-left: 3px solid #0d9488;
+      border-radius: 0 8px 8px 0;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: #134e4a;
+      line-height: 1.4;
+    }
+
+    .report-ai-recom strong {
+      color: #115e59;
+      font-weight: 700;
+    }
+
     .report-footer {
       display: flex;
       align-items: center;
@@ -949,7 +1084,7 @@
       padding: 6px 12px;
       border-radius: 8px;
       transition: color 0.15s;
-      min-height: 48px; /* Target táctil óptimo */
+      min-height: 48px;
       flex: 1;
     }
 
@@ -1094,16 +1229,44 @@
 
     </section>
 
-    <!-- SECCIÓN 2: FORMULARIO Y LISTA DE REPORTES (M3 + M4) -->
+    <!-- SECCIÓN 2: FORMULARIO Y LISTA DE REPORTES (M3 + M4 + M5) -->
     <section id="viewReports" class="view-section">
       
+      <!-- M5: Tarjeta de Configuración de API Key de Gemini -->
+      <div class="gemini-config-card" id="geminiConfigCard">
+        <div class="gemini-config-header" onclick="toggleGeminiKeySection()">
+          <span class="gemini-config-title">
+            <span>✨</span>
+            <span>Sello de IA con Google Gemini</span>
+          </span>
+          <span id="geminiKeyStatusBadge" style="font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 999px; background: #ccfbf1; color: #0f766e;">
+            ⚙️ Configurar Clave
+          </span>
+        </div>
+        <div class="gemini-config-body" id="geminiConfigBody" style="display: none;">
+          <label for="geminiApiKeyInput" style="font-size: 11px; font-weight: 700; color: #115e59; display: block;">
+            Ingresá tu API Key de Gemini (gemini-2.5-flash):
+          </label>
+          <div class="gemini-key-input-row">
+            <input type="password" id="geminiApiKeyInput" class="form-control" placeholder="Pega tu clave AIzaSy..." style="font-size: 12px; min-height: 38px;" />
+            <button type="button" id="btnToggleShowKey" style="background:#ccfbf1; border:1px solid #99f6e4; border-radius:8px; padding:0 8px; cursor:pointer;" title="Mostrar / ocultar clave">👁️</button>
+            <button type="button" id="btnSaveGeminiKey" class="btn btn-primary" style="width: auto; min-height: 38px; padding: 0 12px; font-size: 12px; white-space: nowrap;">
+              Guardar
+            </button>
+          </div>
+          <p style="font-size: 10.5px; color: #0f766e; margin-top: 5px;">
+            Si no ingresas clave o no hay internet, la app clasificará los reportes automáticamente como <em>"Por clasificar (offline)"</em> sin detener el proceso.
+          </p>
+        </div>
+      </div>
+
       <div class="card" id="reportFormCard">
         <div class="card-title">
           <span>📢</span>
           <span>Reportar Punto de Basura Fuera de Horario</span>
         </div>
         <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
-          Notificá esquinas sucias o acumulación indebida para que la cuadrilla ambiental programe el retiro.
+          Notificá esquinas sucias o acumulación indebida. Gemini clasificará la prioridad y generará la recomendación para la alcaldía.
         </p>
 
         <!-- M4: Caja de alerta de error en rojo accesible dentro de pantalla -->
@@ -1181,15 +1344,15 @@
             </div>
           </div>
 
-          <!-- M4: Botón de envío con prevención de doble clic y feedback de guardado -->
+          <!-- M4 & M5: Botón de envío con prevención de doble clic y feedback de IA -->
           <button type="submit" class="btn btn-primary" id="btnSubmitReport">
-            <span>🚀</span>
-            <span>Registrar y Enviar Reporte</span>
+            <span>✨</span>
+            <span>Evaluar con IA y Enviar Reporte</span>
           </button>
         </form>
       </div>
 
-      <!-- Listado de Reportes Guardados (M3: Con Estado Vacío) -->
+      <!-- Listado de Reportes Guardados (M3: Con Estado Vacío, M5: Con Sello de IA) -->
       <div style="margin-top: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <h3 style="font-size: 14px; font-weight: 700; color: #334155;">Reportes Comunitarios Registrados</h3>
@@ -1318,6 +1481,7 @@
      * M2: Persistencia en localStorage con Mockup
      * M3: Responsive 320px+ con Estado Vacío amigable
      * M4: Validaciones estrictas, límite 200 caracteres y caja de error roja
+     * M5: Sello de IA con Google Gemini (gemini-2.5-flash) estructurado en JSON
      * =========================================================================
      */
 
@@ -1374,7 +1538,12 @@
           description: 'Acumulación de varias bolsas de desecho en la esquina junto al poste de luz fuera del horario del tren de aseo.',
           photo: SAMPLE_PHOTOS.bolsas,
           status: 'pending',
-          timestamp: new Date(Date.now() - 3600000 * 2).toISOString()
+          timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
+          // M5: Estructura de IA en mockup inicial
+          aiAnalysis: {
+            prioridad: 'Alta',
+            recomendacion: 'Despachar camión recolector de apoyo en el turno de la tarde para evitar dispersión por animales callejeros.'
+          }
         },
         {
           id: 'rep-mock-2',
@@ -1384,7 +1553,11 @@
           description: 'Escombros y restos de construcción dejados en la cuneta obstruyendo el paso del agua.',
           photo: SAMPLE_PHOTOS.escombros,
           status: 'resolved',
-          timestamp: new Date(Date.now() - 3600000 * 20).toISOString()
+          timestamp: new Date(Date.now() - 3600000 * 20).toISOString(),
+          aiAnalysis: {
+            prioridad: 'Media',
+            recomendacion: 'Programar cuadrilla de escombros y desobstrucción de cuneta con equipo adecuado.'
+          }
         }
       ];
     }
@@ -1397,12 +1570,14 @@
       reports: [],
       activeZoneId: '',
       consultDate: new Date(),
-      selectedPhotoData: null
+      selectedPhotoData: null,
+      geminiApiKey: ''
     };
 
     const STORAGE_KEY_ZONES = 'basura_cero_zonas_data';
     const STORAGE_KEY_REPORTS = 'basura_cero_reportes_data';
     const STORAGE_KEY_ACTIVE_ZONE = 'basura_cero_active_zone_id';
+    const STORAGE_KEY_GEMINI_KEY = 'basura_cero_gemini_api_key';
 
     function loadLocalStorageData() {
       try {
@@ -1423,7 +1598,6 @@
         const rawReports = localStorage.getItem(STORAGE_KEY_REPORTS);
         if (rawReports) {
           const parsed = JSON.parse(rawReports);
-          // Permitir array vacío explícito si el usuario borró todos los reportes para probar el estado vacío
           appState.reports = Array.isArray(parsed) ? parsed : getMockupReports();
         } else {
           appState.reports = getMockupReports();
@@ -1441,6 +1615,12 @@
         appState.activeZoneId = appState.zones[0].id;
         localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, appState.activeZoneId);
       }
+
+      // M5: Cargar API Key de Gemini
+      const savedKey = localStorage.getItem(STORAGE_KEY_GEMINI_KEY);
+      if (savedKey) {
+        appState.geminiApiKey = savedKey.trim();
+      }
     }
 
     function saveZonesToStorage() {
@@ -1453,6 +1633,108 @@
       try {
         localStorage.setItem(STORAGE_KEY_REPORTS, JSON.stringify(appState.reports));
       } catch (e) {}
+    }
+
+    // =========================================================================
+    // M5: LLAMADO A LA API DE GOOGLE GEMINI (gemini-2.5-flash)
+    // =========================================================================
+
+    /**
+     * Envía la ubicación y descripción a Gemini (gemini-2.5-flash) mediante fetch()
+     * y solicita un JSON estructurado con:
+     * {
+     *   "prioridad": "Baja | Media | Alta | Crítica",
+     *   "recomendacion": "..."
+     * }
+     * Si no hay clave, falla o hay error de red, clasifica como "Por clasificar (offline)"
+     */
+    async function analyzeReportWithGemini(location, description) {
+      const apiKey = appState.geminiApiKey || '';
+
+      // Si no hay API Key ingresada, retornar fallback offline elegante
+      if (!apiKey) {
+        return {
+          prioridad: 'Por clasificar (offline)',
+          recomendacion: 'Pendiente de evaluación manual por la unidad ambiental (sin clave Gemini).'
+        };
+      }
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+      const promptText = `Sos el sistema oficial de triaje ambiental de la alcaldía para la app BASURA CERO.
+Tu tarea es analizar el siguiente reporte ciudadano sobre acumulación de basura fuera de horario y determinar:
+1. Nivel de prioridad según el riesgo sanitario, bloqueo de vías públicas o proliferación de plagas. Opciones permitidas: "Baja", "Media", "Alta", "Crítica".
+2. Una recomendación de acción inmediata y concisa (1 o 2 oraciones) dirigida a la unidad ambiental de la alcaldía.
+
+DATOS DEL REPORTE:
+- Ubicación: "${location}"
+- Descripción: "${description}"
+
+IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exacto, sin bloques markdown de código:
+{
+  "prioridad": "Baja | Media | Alta | Crítica",
+  "recomendacion": "Acción inmediata sugerida para la unidad ambiental de la alcaldía"
+}`;
+
+      try {
+        // Controlador de timeout de 7 segundos para no dejar colgada la UI en celulares con red lenta
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{ text: promptText }]
+            }],
+            generationConfig: {
+              responseMimeType: "application/json",
+              temperature: 0.2
+            }
+          }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const candidateText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        
+        if (!candidateText) {
+          throw new Error('Sin contenido retornado por Gemini');
+        }
+
+        // Limpiar backticks si el modelo los agregase
+        const cleanedText = candidateText.replace(/^```json/i, '').replace(/```$/i, '').trim();
+        const parsed = JSON.parse(cleanedText);
+
+        // Normalizar prioridad a las opciones válidas
+        let prioridad = parsed.prioridad || 'Media';
+        if (/cr[ií]tica/i.test(prioridad)) prioridad = 'Crítica';
+        else if (/alta/i.test(prioridad)) prioridad = 'Alta';
+        else if (/media/i.test(prioridad)) prioridad = 'Media';
+        else if (/baja/i.test(prioridad)) prioridad = 'Baja';
+        else prioridad = 'Por clasificar (offline)';
+
+        return {
+          prioridad: prioridad,
+          recomendacion: parsed.recomendacion || 'Atender según el turno habitual de la cuadrilla municipal.'
+        };
+      } catch (err) {
+        // En caso de error (clave inválida, sin red, cuota excedida o timeout),
+        // fallback elegante "Por clasificar (offline)" sin romper la app
+        return {
+          prioridad: 'Por clasificar (offline)',
+          recomendacion: 'Pendiente de evaluación manual por la unidad ambiental de la alcaldía.'
+        };
+      }
     }
 
     // =========================================================================
@@ -1612,7 +1894,7 @@
     }
 
     // =========================================================================
-    // M4: CONTROL DE ERRORES Y VALIDACIONES DEL FORMULARIO DE REPORTES
+    // M4: CONTROL DE ERRORES Y VALIDACIONES
     // =========================================================================
     function showFormError(message, targetElementId = null) {
       const errorBox = document.getElementById('formErrorBox');
@@ -1621,7 +1903,6 @@
       errorMessage.textContent = message;
       errorBox.style.display = 'flex';
       
-      // Resaltar campo con borde rojo
       if (targetElementId) {
         const input = document.getElementById(targetElementId);
         if (input) {
@@ -1651,9 +1932,6 @@
       document.getElementById('zoneErrorBox').style.display = 'none';
     };
 
-    /**
-     * M4: Contador en tiempo real para descripción (máximo 200 caracteres)
-     */
     function setupCharCounter() {
       const descInput = document.getElementById('reportDescription');
       const countBadge = document.getElementById('charCountBadge');
@@ -1673,6 +1951,64 @@
       });
     }
 
+    // =========================================================================
+    // M5: GESTIÓN DE LA API KEY DE GEMINI EN LA UI
+    // =========================================================================
+    window.toggleGeminiKeySection = function() {
+      const body = document.getElementById('geminiConfigBody');
+      const isVisible = body.style.display === 'block';
+      body.style.display = isVisible ? 'none' : 'block';
+    };
+
+    function updateGeminiBadge() {
+      const badge = document.getElementById('geminiKeyStatusBadge');
+      const input = document.getElementById('geminiApiKeyInput');
+      if (appState.geminiApiKey) {
+        badge.textContent = '✅ Clave Activa';
+        badge.style.background = '#d1fae5';
+        badge.style.color = '#065f46';
+        if (input) input.value = appState.geminiApiKey;
+      } else {
+        badge.textContent = '⚙️ Configurar Clave';
+        badge.style.background = '#ccfbf1';
+        badge.style.color = '#0f766e';
+      }
+    }
+
+    function setupGeminiKeyControls() {
+      const saveBtn = document.getElementById('btnSaveGeminiKey');
+      const keyInput = document.getElementById('geminiApiKeyInput');
+      const toggleBtn = document.getElementById('btnToggleShowKey');
+
+      updateGeminiBadge();
+
+      saveBtn.addEventListener('click', () => {
+        const val = keyInput.value.trim();
+        appState.geminiApiKey = val;
+        localStorage.setItem(STORAGE_KEY_GEMINI_KEY, val);
+        updateGeminiBadge();
+        if (val) {
+          showToast('Clave de Gemini guardada correctamente');
+        } else {
+          showToast('Clave eliminada. Modo offline activo');
+        }
+        document.getElementById('geminiConfigBody').style.display = 'none';
+      });
+
+      toggleBtn.addEventListener('click', () => {
+        if (keyInput.type === 'password') {
+          keyInput.type = 'text';
+          toggleBtn.textContent = '🙈';
+        } else {
+          keyInput.type = 'password';
+          toggleBtn.textContent = '👁️';
+        }
+      });
+    }
+
+    // =========================================================================
+    // FORMULARIO DE REPORTES CON GEMINI AI (M4 + M5)
+    // =========================================================================
     function setupReportForm() {
       const reportForm = document.getElementById('reportForm');
       const photoInput = document.getElementById('reportPhotoInput');
@@ -1725,8 +2061,8 @@
         }
       });
 
-      // M4: Envío con validaciones estrictas y protección de doble clic
-      reportForm.addEventListener('submit', (e) => {
+      // M4 & M5: Envío con validaciones, protección de doble clic y análisis de IA
+      reportForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         dismissFormError();
 
@@ -1737,19 +2073,18 @@
         const descInput = document.getElementById('reportDescription');
         const description = descInput.value.trim();
 
-        // Validación M4: No permitir ubicación vacía
+        // M4: Validación de ubicación
         if (!location) {
           showFormError('Por favor ingresa la ubicación exacta del punto crítico.', 'reportLocation');
           return;
         }
 
-        // Validación M4: No permitir descripción vacía
+        // M4: Validación de descripción
         if (!description) {
           showFormError('Por favor ingresa una breve descripción del problema de acumulación.', 'reportDescription');
           return;
         }
 
-        // Validación M4: Longitud máxima de 200 caracteres
         if (description.length > 200) {
           showFormError('La descripción excede el límite permitido de 200 caracteres.', 'reportDescription');
           return;
@@ -1758,9 +2093,20 @@
         // M4: Desactivar botón temporalmente para prevenir doble clic
         btnSubmit.disabled = true;
         const originalBtnHtml = btnSubmit.innerHTML;
-        btnSubmit.innerHTML = '<span>⏳</span><span>Guardando reporte...</span>';
+        btnSubmit.innerHTML = '<span>🤖</span><span>Analizando con IA y guardando...</span>';
 
         const photoToSave = appState.selectedPhotoData || SAMPLE_PHOTOS.bolsas;
+
+        // M5: Llamado a Gemini API para análisis de triaje y recomendación
+        let aiResult;
+        try {
+          aiResult = await analyzeReportWithGemini(location, description);
+        } catch (error) {
+          aiResult = {
+            prioridad: 'Por clasificar (offline)',
+            recomendacion: 'Pendiente de evaluación manual por la cuadrilla ambiental.'
+          };
+        }
 
         const newReport = {
           id: 'rep-' + Date.now(),
@@ -1770,28 +2116,26 @@
           description,
           photo: photoToSave,
           status: 'pending',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          aiAnalysis: aiResult // M5: Almacenar Sello de IA
         };
 
-        // Simular guardado asíncrono limpio
-        setTimeout(() => {
-          appState.reports.unshift(newReport);
-          saveReportsToStorage();
+        appState.reports.unshift(newReport);
+        saveReportsToStorage();
 
-          reportForm.reset();
-          clearPhotoPreview();
-          document.getElementById('charCountBadge').textContent = '0 / 200';
-          document.getElementById('charCountBadge').className = 'char-counter';
+        reportForm.reset();
+        clearPhotoPreview();
+        document.getElementById('charCountBadge').textContent = '0 / 200';
+        document.getElementById('charCountBadge').className = 'char-counter';
 
-          renderReportsList();
-          showToast('¡Reporte comunitario guardado con éxito!');
+        renderReportsList();
+        showToast(`¡Reporte registrado con Sello de IA: Prioridad ${aiResult.prioridad}!`);
 
-          // Restaurar botón de envío
-          btnSubmit.disabled = false;
-          btnSubmit.innerHTML = originalBtnHtml;
+        // Restaurar botón
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = originalBtnHtml;
 
-          document.getElementById('reportsList').scrollIntoView({ behavior: 'smooth' });
-        }, 350);
+        document.getElementById('reportsList').scrollIntoView({ behavior: 'smooth' });
       });
     }
 
@@ -1818,8 +2162,18 @@
     }
 
     // =========================================================================
-    // M3: LISTADO DE REPORTES CON ESTADO VACÍO AMIGABLE
+    // M3 + M5: LISTADO DE REPORTES CON SELLO DE IA Y ESTADO VACÍO
     // =========================================================================
+    function getPriorityBadgeClass(prioridad) {
+      if (!prioridad) return 'priority-offline';
+      const p = prioridad.toLowerCase();
+      if (p.includes('baja')) return 'priority-baja';
+      if (p.includes('media')) return 'priority-media';
+      if (p.includes('alta')) return 'priority-alta';
+      if (p.includes('crítica') || p.includes('critica')) return 'priority-critica';
+      return 'priority-offline';
+    }
+
     function renderReportsList() {
       const container = document.getElementById('reportsList');
       const badge = document.getElementById('reportsCountBadge');
@@ -1846,6 +2200,13 @@
       container.innerHTML = appState.reports.map(rep => {
         const isResolved = rep.status === 'resolved';
         const formattedDate = formatRelativeTime(rep.timestamp);
+        
+        // M5: Datos de IA
+        const ai = rep.aiAnalysis || {
+          prioridad: 'Por clasificar (offline)',
+          recomendacion: 'Sin recomendación registrada.'
+        };
+        const badgeClass = getPriorityBadgeClass(ai.prioridad);
 
         return `
           <div class="report-card" id="${rep.id}">
@@ -1862,6 +2223,21 @@
             <p class="report-desc">${escapeHtml(rep.description)}</p>
             
             ${rep.photo ? `<img src="${rep.photo}" alt="Evidencia del punto de basura" class="report-img" />` : ''}
+
+            <!-- M5: Sello de IA con etiqueta visual de prioridad y recomendación -->
+            <div class="report-ai-badge-row">
+              <span class="ai-label-tag">
+                <span>🤖</span>
+                <span>Sello de IA</span>
+              </span>
+              <span class="priority-badge ${badgeClass}">
+                Prioridad: ${escapeHtml(ai.prioridad)}
+              </span>
+            </div>
+            <div class="report-ai-recom">
+              <strong>💡 Recomendación para la alcaldía:</strong>
+              <div>${escapeHtml(ai.recomendacion)}</div>
+            </div>
 
             <div class="report-footer">
               <div>
@@ -1883,7 +2259,6 @@
       }).join('');
     }
 
-    // M3: Acción para crear primer reporte desde el estado vacío
     window.focusReportForm = function() {
       const locationInput = document.getElementById('reportLocation');
       const formCard = document.getElementById('reportFormCard');
@@ -2150,6 +2525,7 @@
 
       setupDateControl();
       setupCharCounter();
+      setupGeminiKeyControls();
       setupZoneRegistration();
       setupReportForm();
     }
