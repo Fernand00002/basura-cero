@@ -46,3 +46,11 @@ Integra la MEJORA M5 (Sello de IA con la API de Google Gemini gemini-2.5-flash) 
 5. Agrega un campo simple para que el usuario pueda ingresar su API Key de Gemini.
 
 Entrégame el archivo index.html completo e integrado con todo lo anterior listo para producción.
+
+PROMT 6 MEJORA PARA PUNTO:
+Actualiza la app BASURA CERO para que utilice imágenes reales en lugar de ilustraciones u objetos vectoriales.
+REQUERIMIENTOS DE IMÁGENES:
+En todos los reportes de ejemplo (mockups iniciales en localStorage), asigna URLs de fotos reales de alta calidad sobre basura en las calles, contenedores de reciclaje y camiones recolectores usando Unsplash (ejemplo: https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80).
+Si el usuario crea un reporte y no adjunta/selecciona una imagen, la app debe asignar automáticamente una foto real por defecto que simule acumulación de bolsas o desechos urbanos.
+Asegúrate de que las etiquetas <img> tengan la propiedad object-fit: cover, border-radius redondeado y la directiva onerror="this.src='https://images.unsplash.com/photo-1604186837056-8e7c286766f2?auto=format&fit=crop&w=600&q=80'" para que nunca se vean imágenes rotas.
+Entrega el código completo actualizado en un único archivo HTML con CSS y JS integrados, listo para copiar y reemplazar en index.html.
