@@ -897,12 +897,16 @@
       line-height: 1.4;
     }
 
+    /* Imagen de Evidencia en el reporte */
     .report-img {
       width: 100%;
-      height: 140px;
+      height: 150px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 10px;
+      display: block;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
     }
 
     /* M5: SECCIÓN DEL SELLO DE IA EN LA TARJETA */
@@ -1339,7 +1343,7 @@
 
             <!-- Vista previa de foto -->
             <div class="photo-preview" id="photoPreviewContainer">
-              <img id="previewImg" src="" alt="Vista previa del reporte" />
+              <img id="previewImg" src="" alt="Vista previa del reporte" onerror="this.style.display='none';" />
               <button type="button" class="remove-photo" id="btnRemovePhoto" title="Quitar imagen">✕</button>
             </div>
           </div>
@@ -1489,10 +1493,14 @@
     const DAY_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
+    // Placeholder por defecto seguro sin comillas dobles en atributos
+    const DEFAULT_PLACEHOLDER_PHOTO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='200' y='105' font-family='sans-serif' font-weight='bold' font-size='15' fill='%2364748b' text-anchor='middle'%3E%F0%9F%93%B7 Sin foto adjunta%3C/text%3E%3C/svg%3E";
+
+    // Muestras SVG seguras (URL codificadas con comillas simples para evitar romper atributos HTML)
     const SAMPLE_PHOTOS = {
-      bolsas: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23fee2e2"/><ellipse cx="140" cy="130" rx="45" ry="50" fill="%231e293b"/><ellipse cx="210" cy="120" rx="55" ry="60" fill="%230f172a"/><ellipse cx="280" cy="140" rx="40" ry="45" fill="%23334155"/><path d="M120,80 Q140,60 160,80" stroke="%23f87171" stroke-width="4" fill="none"/><text x="200" y="175" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: BOLSAS FUERA DE HORARIO</text></svg>',
-      escombros: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23cbd5e1"/><polygon points="60,180 140,70 210,180" fill="%2364748b"/><polygon points="180,180 260,90 340,180" fill="%23475569"/><circle cx="200" cy="50" r="20" fill="%23f59e0b"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: ESCOMBROS EN ACERA</text></svg>',
-      poda: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23dcfce7"/><ellipse cx="200" cy="120" rx="90" ry="60" fill="%2315803d"/><path d="M140,150 L120,180 M200,160 L200,190 M260,150 L280,180" stroke="%2378350f" stroke-width="6"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: RESTOS DE PODA</text></svg>'
+      bolsas: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23fee2e2'/%3E%3Cellipse cx='140' cy='130' rx='45' ry='50' fill='%231e293b'/%3E%3Cellipse cx='210' cy='120' rx='55' ry='60' fill='%230f172a'/%3E%3Cellipse cx='280' cy='140' rx='40' ry='45' fill='%23334155'/%3E%3Cpath d='M120,80 Q140,60 160,80' stroke='%23f87171' stroke-width='4' fill='none'/%3E%3Ctext x='200' y='175' font-family='sans-serif' font-weight='bold' font-size='15' fill='%23ffffff' text-anchor='middle'%3EREPORTE: BOLSAS FUERA DE HORARIO%3C/text%3E%3C/svg%3E",
+      escombros: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23cbd5e1'/%3E%3Cpolygon points='60,180 140,70 210,180' fill='%2364748b'/%3E%3Cpolygon points='180,180 260,90 340,180' fill='%23475569'/%3E%3Ccircle cx='200' cy='50' r='20' fill='%23f59e0b'/%3E%3Ctext x='200' y='165' font-family='sans-serif' font-weight='bold' font-size='15' fill='%23ffffff' text-anchor='middle'%3EREPORTE: ESCOMBROS EN ACERA%3C/text%3E%3C/svg%3E",
+      poda: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23dcfce7'/%3E%3Cellipse cx='200' cy='120' rx='90' ry='60' fill='%2315803d'/%3E%3Cpath d='M140,150 L120,180 M200,160 L200,190 M260,150 L280,180' stroke='%2378350f' stroke-width='6'/%3E%3Ctext x='200' y='165' font-family='sans-serif' font-weight='bold' font-size='15' fill='%23ffffff' text-anchor='middle'%3EREPORTE: RESTOS DE PODA%3C/text%3E%3C/svg%3E"
     };
 
     // =========================================================================
@@ -1507,14 +1515,14 @@
         {
           id: 'zona-casco-urbano',
           name: 'Zona 1 - Casco Central y Mercado',
-          days: [tomorrow, (tomorrow + 3) % 7], // Incluye mañana
+          days: [tomorrow, (tomorrow + 3) % 7],
           time: '06:30',
           notes: 'Ruta prioritaria - Sacar antes de las 6:00 AM'
         },
         {
           id: 'zona-colonia-san-jose',
           name: 'Zona 2 - Colonia San José',
-          days: [today, dayAfterTomorrow], // Incluye hoy
+          days: [today, dayAfterTomorrow],
           time: '08:00',
           notes: 'Ruta matutina residencial'
         },
@@ -1539,7 +1547,6 @@
           photo: SAMPLE_PHOTOS.bolsas,
           status: 'pending',
           timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-          // M5: Estructura de IA en mockup inicial
           aiAnalysis: {
             prioridad: 'Alta',
             recomendacion: 'Despachar camión recolector de apoyo en el turno de la tarde para evitar dispersión por animales callejeros.'
@@ -1579,6 +1586,15 @@
     const STORAGE_KEY_ACTIVE_ZONE = 'basura_cero_active_zone_id';
     const STORAGE_KEY_GEMINI_KEY = 'basura_cero_gemini_api_key';
 
+    function sanitizeStoredPhoto(photo) {
+      if (!photo || typeof photo !== 'string') return DEFAULT_PLACEHOLDER_PHOTO;
+      // Corrige datos previos si contenían comillas dobles sin escapar que rompían la etiqueta img
+      if (photo.startsWith('data:image/svg+xml;utf8,<svg')) {
+        return photo.replace(/"/g, "'");
+      }
+      return photo;
+    }
+
     function loadLocalStorageData() {
       try {
         const rawZones = localStorage.getItem(STORAGE_KEY_ZONES);
@@ -1598,7 +1614,15 @@
         const rawReports = localStorage.getItem(STORAGE_KEY_REPORTS);
         if (rawReports) {
           const parsed = JSON.parse(rawReports);
-          appState.reports = Array.isArray(parsed) ? parsed : getMockupReports();
+          if (Array.isArray(parsed)) {
+            // Limpiar y asegurar que las fotos no tengan comillas problemáticas
+            appState.reports = parsed.map(rep => {
+              if (rep.photo) rep.photo = sanitizeStoredPhoto(rep.photo);
+              return rep;
+            });
+          } else {
+            appState.reports = getMockupReports();
+          }
         } else {
           appState.reports = getMockupReports();
           saveReportsToStorage();
@@ -1616,7 +1640,6 @@
         localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, appState.activeZoneId);
       }
 
-      // M5: Cargar API Key de Gemini
       const savedKey = localStorage.getItem(STORAGE_KEY_GEMINI_KEY);
       if (savedKey) {
         appState.geminiApiKey = savedKey.trim();
@@ -1638,20 +1661,9 @@
     // =========================================================================
     // M5: LLAMADO A LA API DE GOOGLE GEMINI (gemini-2.5-flash)
     // =========================================================================
-
-    /**
-     * Envía la ubicación y descripción a Gemini (gemini-2.5-flash) mediante fetch()
-     * y solicita un JSON estructurado con:
-     * {
-     *   "prioridad": "Baja | Media | Alta | Crítica",
-     *   "recomendacion": "..."
-     * }
-     * Si no hay clave, falla o hay error de red, clasifica como "Por clasificar (offline)"
-     */
     async function analyzeReportWithGemini(location, description) {
       const apiKey = appState.geminiApiKey || '';
 
-      // Si no hay API Key ingresada, retornar fallback offline elegante
       if (!apiKey) {
         return {
           prioridad: 'Por clasificar (offline)',
@@ -1677,7 +1689,6 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
 }`;
 
       try {
-        // Controlador de timeout de 7 segundos para no dejar colgada la UI en celulares con red lenta
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 7000);
 
@@ -1711,11 +1722,9 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
           throw new Error('Sin contenido retornado por Gemini');
         }
 
-        // Limpiar backticks si el modelo los agregase
         const cleanedText = candidateText.replace(/^```json/i, '').replace(/```$/i, '').trim();
         const parsed = JSON.parse(cleanedText);
 
-        // Normalizar prioridad a las opciones válidas
         let prioridad = parsed.prioridad || 'Media';
         if (/cr[ií]tica/i.test(prioridad)) prioridad = 'Crítica';
         else if (/alta/i.test(prioridad)) prioridad = 'Alta';
@@ -1728,8 +1737,6 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
           recomendacion: parsed.recomendacion || 'Atender según el turno habitual de la cuadrilla municipal.'
         };
       } catch (err) {
-        // En caso de error (clave inválida, sin red, cuota excedida o timeout),
-        // fallback elegante "Por clasificar (offline)" sin romper la app
         return {
           prioridad: 'Por clasificar (offline)',
           recomendacion: 'Pendiente de evaluación manual por la unidad ambiental de la alcaldía.'
@@ -2061,7 +2068,6 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         }
       });
 
-      // M4 & M5: Envío con validaciones, protección de doble clic y análisis de IA
       reportForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         dismissFormError();
@@ -2073,13 +2079,11 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         const descInput = document.getElementById('reportDescription');
         const description = descInput.value.trim();
 
-        // M4: Validación de ubicación
         if (!location) {
           showFormError('Por favor ingresa la ubicación exacta del punto crítico.', 'reportLocation');
           return;
         }
 
-        // M4: Validación de descripción
         if (!description) {
           showFormError('Por favor ingresa una breve descripción del problema de acumulación.', 'reportDescription');
           return;
@@ -2090,14 +2094,13 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
           return;
         }
 
-        // M4: Desactivar botón temporalmente para prevenir doble clic
         btnSubmit.disabled = true;
         const originalBtnHtml = btnSubmit.innerHTML;
         btnSubmit.innerHTML = '<span>🤖</span><span>Analizando con IA y guardando...</span>';
 
         const photoToSave = appState.selectedPhotoData || SAMPLE_PHOTOS.bolsas;
 
-        // M5: Llamado a Gemini API para análisis de triaje y recomendación
+        // M5: Triaje con Gemini 2.5 Flash
         let aiResult;
         try {
           aiResult = await analyzeReportWithGemini(location, description);
@@ -2117,7 +2120,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
           photo: photoToSave,
           status: 'pending',
           timestamp: new Date().toISOString(),
-          aiAnalysis: aiResult // M5: Almacenar Sello de IA
+          aiAnalysis: aiResult
         };
 
         appState.reports.unshift(newReport);
@@ -2131,7 +2134,6 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         renderReportsList();
         showToast(`¡Reporte registrado con Sello de IA: Prioridad ${aiResult.prioridad}!`);
 
-        // Restaurar botón
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = originalBtnHtml;
 
@@ -2162,7 +2164,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
     }
 
     // =========================================================================
-    // M3 + M5: LISTADO DE REPORTES CON SELLO DE IA Y ESTADO VACÍO
+    // M3 + M5: LISTADO DE REPORTES CON SELLO DE IA, IMÁGENES SEGURAS Y ESTADO VACÍO
     // =========================================================================
     function getPriorityBadgeClass(prioridad) {
       if (!prioridad) return 'priority-offline';
@@ -2172,6 +2174,21 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
       if (p.includes('alta')) return 'priority-alta';
       if (p.includes('crítica') || p.includes('critica')) return 'priority-critica';
       return 'priority-offline';
+    }
+
+    /**
+     * Sanitiza la URL o Data URI de la foto para prevenir errores de sintaxis HTML
+     */
+    function getSafePhotoSrc(photo) {
+      if (!photo || typeof photo !== 'string' || photo.trim() === '') {
+        return DEFAULT_PLACEHOLDER_PHOTO;
+      }
+      let cleaned = photo.trim();
+      // Si contiene comillas dobles que romperían src="...", cambiarlas a comillas simples
+      if (cleaned.includes('"')) {
+        cleaned = cleaned.replace(/"/g, "'");
+      }
+      return cleaned;
     }
 
     function renderReportsList() {
@@ -2201,12 +2218,14 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         const isResolved = rep.status === 'resolved';
         const formattedDate = formatRelativeTime(rep.timestamp);
         
-        // M5: Datos de IA
         const ai = rep.aiAnalysis || {
           prioridad: 'Por clasificar (offline)',
           recomendacion: 'Sin recomendación registrada.'
         };
         const badgeClass = getPriorityBadgeClass(ai.prioridad);
+
+        // Obtener URL de imagen segura sin romper atributos HTML
+        const safePhotoUrl = getSafePhotoSrc(rep.photo);
 
         return `
           <div class="report-card" id="${rep.id}">
@@ -2222,7 +2241,8 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
             
             <p class="report-desc">${escapeHtml(rep.description)}</p>
             
-            ${rep.photo ? `<img src="${rep.photo}" alt="Evidencia del punto de basura" class="report-img" />` : ''}
+            <!-- Imagen con placeholder por defecto o se oculta si la URL falla -->
+            <img src="${safePhotoUrl}" alt="Evidencia del punto de basura" class="report-img" loading="lazy" onerror="this.style.display='none'" />
 
             <!-- M5: Sello de IA con etiqueta visual de prioridad y recomendación -->
             <div class="report-ai-badge-row">
