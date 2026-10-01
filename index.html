@@ -10,27 +10,37 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Estilos CSS3 Integrados: Diseño Mobile-First limpio, moderno y accesible -->
+  <!-- Estilos CSS3 Integrados: Mobile-First, Moderno, Limpio y Accesible -->
   <style>
     :root {
-      --primary: #059669;         /* Verde esmeralda municipal */
+      --primary: #059669;            /* Verde esmeralda municipal */
       --primary-dark: #047857;
       --primary-light: #d1fae5;
       --primary-subtle: #ecfdf5;
-      --warning: #d97706;         /* Ámbar de alerta preventiva */
-      --warning-light: #fef3c7;
-      --warning-border: #f59e0b;
+      
+      /* Colores para la Alerta Visual Destacada (Amarillo / Naranja) */
+      --alert-warning-bg: linear-gradient(135deg, #fffbeb 0%, #fef3c7 45%, #fed7aa 100%);
+      --alert-warning-border: #f59e0b;
+      --alert-warning-badge: #d97706;
+      --alert-warning-text: #7c2d12;
+      --alert-warning-glow: rgba(245, 158, 11, 0.4);
+
+      --alert-today-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      --alert-today-border: #10b981;
+      --alert-today-text: #064e3b;
+
       --danger: #dc2626;
       --danger-light: #fee2e2;
-      --bg: #f8fafc;              /* Fondo suave pizarra */
+      --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --radius: 14px;
-      --radius-sm: 8px;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
     }
 
     * {
@@ -45,11 +55,11 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding-bottom: 85px; /* Espacio para barra de navegación inferior móvil */
+      padding-bottom: 86px; /* Espacio para barra fija móvil */
       min-height: 100vh;
     }
 
-    /* Contenedor centralizado para celulares y pantallas pequeñas */
+    /* Contenedor centralizado para celulares y tablets */
     .app-container {
       max-width: 520px;
       margin: 0 auto;
@@ -58,16 +68,22 @@
 
     /* Cabecera de la Aplicación */
     header.app-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
       background: #ffffff;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 50;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .header-content {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
     .brand {
@@ -77,8 +93,8 @@
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border-radius: 10px;
@@ -86,25 +102,266 @@
       align-items: center;
       justify-content: center;
       font-size: 20px;
-      box-shadow: 0 2px 5px rgba(5, 150, 105, 0.3);
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+      flex-shrink: 0;
     }
 
-    .brand h1 {
-      font-size: 18px;
+    .brand-title {
+      font-size: 17px;
       font-weight: 800;
       color: #064e3b;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.4px;
+      line-height: 1.1;
     }
 
-    .brand-badge {
-      font-size: 10px;
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      padding: 2px 7px;
-      border-radius: 999px;
+    .brand-subtitle {
+      font-size: 11px;
+      color: #059669;
       font-weight: 600;
+    }
+
+    .header-zone-selector {
+      text-align: right;
+      min-width: 140px;
+    }
+
+    .header-zone-selector label {
+      display: block;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 700;
       text-transform: uppercase;
-      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .header-zone-selector select {
+      width: 100%;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .header-zone-selector select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Barra de Control de Fecha (MEJORA M1) */
+    .date-control-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .date-control-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .date-control-inputs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .date-input-field {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+      background: #f8fafc;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .date-input-field:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-today {
+      background: var(--primary-subtle);
+      border: 1px solid var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .btn-today:active {
+      background: var(--primary-light);
+    }
+
+    /* MEJORA M1: AVISO VISUAL DESTACADO EN AMARILLO/NARANJA (DÍA ANTERIOR) */
+    .alert-banner {
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s ease;
+      animation: bannerSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes bannerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Variante Destacada: Mañana pasa el tren (Amarillo / Naranja brillante) */
+    .alert-banner.alert-warning {
+      background: var(--alert-warning-bg);
+      border: 2.5px solid var(--alert-warning-border);
+      color: var(--alert-warning-text);
+      box-shadow: 0 10px 25px -4px var(--alert-warning-glow), 0 4px 6px -2px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Variante: Día de Recolección Hoy (Verde activo) */
+    .alert-banner.alert-today {
+      background: var(--alert-today-bg);
+      border: 2.5px solid var(--alert-today-border);
+      color: var(--alert-today-text);
+      box-shadow: 0 10px 20px -3px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Variante: Días Faltantes Normales (Pizarra suave) */
+    .alert-banner.alert-info {
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
+    }
+
+    .alert-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .alert-icon-wrap {
+      font-size: 32px;
+      line-height: 1;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    /* Badge Superior con Pulso Animado */
+    .alert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .badge-warning {
+      background: #f59e0b;
+      color: #ffffff;
+    }
+
+    .badge-today {
+      background: #10b981;
+      color: #ffffff;
+    }
+
+    .badge-info {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .pulsing-beacon {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
+      animation: pulseAnimation 1.5s infinite;
+    }
+
+    @keyframes pulseAnimation {
+      0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
+      }
+      70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 7px rgba(255, 255, 255, 0);
+      }
+      100% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      }
+    }
+
+    .alert-title {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .alert-desc {
+      font-size: 14px;
+      line-height: 1.45;
+      margin-bottom: 12px;
+      opacity: 0.95;
+    }
+
+    .alert-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #9a3412;
+      backdrop-filter: blur(4px);
+    }
+
+    .alert-today .alert-action-pill {
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #065f46;
     }
 
     /* Tarjetas y Componentes */
@@ -114,7 +371,7 @@
       border: 1px solid var(--border);
       padding: 18px;
       margin-bottom: 16px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-sm);
     }
 
     .card-title {
@@ -127,158 +384,6 @@
       margin-bottom: 12px;
     }
 
-    /* ALERTA VISUAL: Aviso del Día Anterior (Función 2) */
-    .alert-banner {
-      border-radius: var(--radius);
-      padding: 18px;
-      margin-bottom: 18px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      transition: all 0.3s ease;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    /* Variante: Alerta de Día Anterior */
-    .alert-banner.alert-warning {
-      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-      border: 2px solid var(--warning-border);
-      color: #78350f;
-    }
-
-    /* Variante: Día de Recolección Hoy */
-    .alert-banner.alert-today {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-      border: 2px solid var(--primary);
-      color: #14532d;
-    }
-
-    /* Variante: Días restantes normales */
-    .alert-banner.alert-info {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      border: 1px solid #cbd5e1;
-      color: #334155;
-    }
-
-    .alert-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .alert-icon {
-      font-size: 28px;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-
-    .alert-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 6px;
-      margin-bottom: 6px;
-    }
-
-    .badge-warning {
-      background: #fde68a;
-      color: #92400e;
-    }
-
-    .badge-today {
-      background: #86efac;
-      color: #166534;
-    }
-
-    .badge-info {
-      background: #e2e8f0;
-      color: #475569;
-    }
-
-    .alert-title {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 4px;
-      line-height: 1.25;
-    }
-
-    .alert-desc {
-      font-size: 13.5px;
-      opacity: 0.95;
-      margin-bottom: 10px;
-    }
-
-    .alert-time-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      backdrop-filter: blur(4px);
-    }
-
-    /* Pulso visual para la alerta del día anterior */
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: #d97706;
-      display: inline-block;
-      box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7);
-      animation: pulsing 1.6s infinite;
-    }
-
-    @keyframes pulsing {
-      0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7);
-      }
-      70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 8px rgba(217, 119, 6, 0);
-      }
-      100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
-      }
-    }
-
-    /* Simulador de Día (Para pruebas de aceptación inmediatas) */
-    .simulator-strip {
-      background: #f1f5f9;
-      border: 1px dashed #cbd5e1;
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12px;
-    }
-
-    .simulator-strip label {
-      font-weight: 600;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .simulator-strip select {
-      background: white;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 12px;
-      color: var(--text);
-      cursor: pointer;
-    }
-
     /* Formularios */
     .form-group {
       margin-bottom: 14px;
@@ -289,7 +394,7 @@
       font-size: 13px;
       font-weight: 600;
       color: #334155;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .form-control {
@@ -301,7 +406,7 @@
       color: var(--text);
       background: #ffffff;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .form-control:focus {
@@ -311,22 +416,22 @@
 
     textarea.form-control {
       resize: vertical;
-      min-height: 75px;
+      min-height: 80px;
     }
 
-    /* Botones de selección de días de la semana */
+    /* Selector de Días de la Semana */
     .days-picker {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 5px;
       margin-top: 4px;
     }
 
     .day-btn {
       background: #f1f5f9;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 2px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 2px;
       font-size: 12px;
       font-weight: 700;
       color: #475569;
@@ -340,10 +445,10 @@
       background: var(--primary);
       border-color: var(--primary-dark);
       color: #ffffff;
-      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.25);
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
     }
 
-    /* Botones Principales */
+    /* Botones */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -366,7 +471,7 @@
     .btn-primary {
       background: var(--primary);
       color: white;
-      box-shadow: 0 2px 5px rgba(5, 150, 105, 0.3);
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
     }
 
     .btn-primary:hover {
@@ -390,10 +495,12 @@
       font-size: 12px;
       padding: 5px 10px;
       border-radius: 6px;
-      width: auto;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
     }
 
-    /* Área de Foto y Preview */
+    /* Área de Fotos y Pruebas Ficticias */
     .photo-upload-area {
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius-sm);
@@ -448,7 +555,7 @@
       font-size: 11px;
       background: #e2e8f0;
       color: #334155;
-      padding: 4px 8px;
+      padding: 5px 9px;
       border-radius: 6px;
       cursor: pointer;
       border: none;
@@ -471,7 +578,7 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
       padding: 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
       animation: fadeIn 0.2s ease;
     }
 
@@ -517,7 +624,7 @@
       width: 100%;
       height: 140px;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 8px;
       margin-bottom: 10px;
     }
 
@@ -543,10 +650,10 @@
       align-items: center;
       justify-content: space-between;
       padding: 12px;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       background: #ffffff;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
 
     .zone-item.active-zone {
@@ -573,15 +680,15 @@
     }
 
     .day-chip {
-      font-size: 10px;
+      font-size: 10.5px;
       background: #e2e8f0;
       color: #334155;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 4px;
       font-weight: 600;
     }
 
-    /* Barra de Navegación Inferior (Estilo App Móvil) */
+    /* Barra de Navegación Inferior (Estilo Móvil) */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -595,7 +702,7 @@
       z-index: 100;
       max-width: 520px;
       margin: 0 auto;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+      box-shadow: 0 -3px 12px rgba(0,0,0,0.05);
     }
 
     .nav-item {
@@ -609,7 +716,7 @@
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 8px;
       transition: color 0.15s;
     }
@@ -638,7 +745,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Notificaciones Flotantes (Toast) */
+    /* Notificación Toast */
     .toast {
       position: fixed;
       bottom: 95px;
@@ -650,10 +757,10 @@
       border-radius: 999px;
       font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       opacity: 0;
       pointer-events: none;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       z-index: 200;
       white-space: nowrap;
     }
@@ -665,12 +772,12 @@
 
     .empty-state {
       text-align: center;
-      padding: 30px 16px;
+      padding: 26px 16px;
       color: var(--text-muted);
     }
 
     .empty-icon {
-      font-size: 38px;
+      font-size: 36px;
       margin-bottom: 8px;
       opacity: 0.6;
     }
@@ -680,56 +787,54 @@
 
   <!-- Cabecera Principal -->
   <header class="app-header">
-    <div class="brand">
-      <div class="brand-icon">🚛</div>
-      <div>
-        <h1>BASURA CERO</h1>
-        <span class="brand-badge">Alcaldía & Vecinos</span>
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-icon">🚛</div>
+        <div>
+          <h1 class="brand-title">BASURA CERO</h1>
+          <span class="brand-subtitle">Alcaldía & Comunidad</span>
+        </div>
       </div>
-    </div>
-    <!-- Selector rápido de Zona Activa -->
-    <div style="text-align: right;">
-      <label for="activeZoneSelect" style="display:block; font-size:10px; color:#64748b; font-weight:600; text-transform:uppercase;">Mi Zona</label>
-      <select id="activeZoneSelect" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:3px 6px; font-size:12px; font-weight:700; color:#0f172a; cursor:pointer;">
-        <!-- Se llena dinámicamente con JS -->
-      </select>
+      <!-- Selector de Zona Activa -->
+      <div class="header-zone-selector">
+        <label for="activeZoneSelect">Zona Seleccionada</label>
+        <select id="activeZoneSelect" title="Cambia tu zona para consultar horarios y alertas">
+          <!-- Opciones cargadas por JS -->
+        </select>
+      </div>
     </div>
   </header>
 
   <!-- Contenedor Principal de la Aplicación -->
   <main class="app-container">
 
-    <!-- Herramienta de Prueba: Simulador de Día Actual para verificar alertas -->
-    <div class="simulator-strip">
-      <div style="display:flex; align-items:center; gap:6px;">
-        <span>🕒</span>
-        <label for="simulatedDaySelect">Simular hoy como:</label>
+    <!-- MEJORA M1: BARRA DE SELECCIÓN DE FECHA CON VERIFICACIÓN AUTOMÁTICA -->
+    <div class="date-control-card">
+      <div class="date-control-info">
+        <span>📅</span>
+        <label for="dateConsultPicker" style="cursor:pointer;">Consultar fecha:</label>
       </div>
-      <select id="simulatedDaySelect" title="Permite probar qué alerta se muestra si hoy fuese otro día">
-        <option value="-1">Hoy Real (Calendario)</option>
-        <option value="1">Lunes</option>
-        <option value="2">Martes</option>
-        <option value="3">Miércoles</option>
-        <option value="4">Jueves</option>
-        <option value="5">Viernes</option>
-        <option value="6">Sábado</option>
-        <option value="0">Domingo</option>
-      </select>
+      <div class="date-control-inputs">
+        <input type="date" id="dateConsultPicker" class="date-input-field" title="Selecciona una fecha para verificar si el tren de aseo pasa al día siguiente" />
+        <button type="button" class="btn-today" id="btnSetTodayDate" title="Verificar con el día de hoy">Hoy</button>
+      </div>
     </div>
 
-    <!-- SECCIÓN 1: INICIO, HORARIOS Y AVISO VISUAL DEL DÍA ANTERIOR -->
+    <!-- SECCIÓN 1: ALERTAS Y HORARIOS (MEJORA M1) -->
     <section id="viewAlerts" class="view-section active">
       
-      <!-- FUNCIÓN 2: Componente Dinámico de Alerta o Aviso Visual (Mañana / Hoy / Próximamente) -->
+      <!-- CONTENEDOR DE LA ALERTA VISUAL:
+           Se evalúa automáticamente al abrir la app o cambiar la fecha/zona.
+           Si mañana pasa el tren, se muestra la tarjeta destacada en amarillo/naranja. -->
       <div id="alertContainer">
-        <!-- Renderizado por JavaScript según la zona y el día actual/simulado -->
+        <!-- Renderizado dinámicamente por JavaScript -->
       </div>
 
       <!-- Resumen del Cronograma de la Zona Activa -->
       <div class="card">
         <div class="card-title">
-          <span>📅</span>
-          <span>Horario del Tren de Aseo en tu Zona</span>
+          <span>⏰</span>
+          <span>Cronograma del Tren de Aseo</span>
         </div>
         
         <div id="currentZoneSummary">
@@ -737,53 +842,60 @@
         </div>
 
         <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 12px; color: var(--text-muted);">¿Cambió la ruta en tu sector?</span>
-          <button type="button" class="btn-outline" style="padding: 5px 10px; font-size: 12px; border-radius: 6px; border: 1px solid var(--border); cursor:pointer;" onclick="switchTab('zones')">
+          <span style="font-size: 12px; color: var(--text-muted);">¿Querés agregar o modificar rutas?</span>
+          <button type="button" class="btn-outline" style="padding: 5px 10px; font-size: 12px; border-radius: 6px; cursor:pointer;" onclick="switchTab('zones')">
             + Administrar Zonas
           </button>
         </div>
       </div>
 
-      <!-- Guía Rápida para el Vecino -->
+      <!-- Recomendación Comunitaria -->
       <div class="card" style="background: #f8fafc; border-left: 4px solid var(--primary);">
         <div style="display: flex; gap: 10px;">
-          <div style="font-size: 20px;">💡</div>
+          <div style="font-size: 22px;">💡</div>
           <div>
-            <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">Regla comunitaria</h4>
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">Cultura Limpia</h4>
             <p style="font-size: 12.5px; color: #475569;">
-              Saca las bolsas cerradas únicamente la noche anterior o 1 hora antes del paso del tren. Mantengamos las esquinas limpias.
+              El tren de aseo solo recolectará bolsas debidamente amarradas. No saques basura con más de 12 horas de anticipación para evitar roturas por animales y multas municipales.
             </p>
           </div>
         </div>
       </div>
 
+      <!-- Panel de Control de Datos Locales (MEJORA M2) -->
+      <div style="text-align: center; margin-top: 10px;">
+        <button type="button" id="btnResetMockupData" style="background: none; border: none; font-size: 11px; color: #94a3b8; text-decoration: underline; cursor: pointer;">
+          Restablecer datos de ejemplo (Mockup)
+        </button>
+      </div>
+
     </section>
 
-    <!-- SECCIÓN 2: FORMULARIO DE REPORTES DE ACUMULACIÓN (FUNCIÓN 3) -->
+    <!-- SECCIÓN 2: FORMULARIO Y LISTA DE REPORTES (FUNCIÓN 3) -->
     <section id="viewReports" class="view-section">
       
       <div class="card">
         <div class="card-title">
-          <span>📸</span>
-          <span>Reportar Basura Fuera de Horario</span>
+          <span>📢</span>
+          <span>Reportar Punto de Basura Fuera de Horario</span>
         </div>
         <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
-          Notifica a la unidad ambiental sobre botaderos ilegales o bolsas acumuladas en la vía pública.
+          Reportá esquinas sucias o acumulación indebida para que la unidad ambiental programe el retiro.
         </p>
 
         <form id="reportForm">
-          <!-- Campo 1: Ubicación -->
+          <!-- Ubicación -->
           <div class="form-group">
-            <label class="form-label" for="reportLocation">Ubicación exacta *</label>
+            <label class="form-label" for="reportLocation">Ubicación exacta del punto *</label>
             <div style="display: flex; gap: 6px;">
-              <input type="text" id="reportLocation" class="form-control" placeholder="Ej: 4ta Calle Poniente frente a la farmacia" required />
-              <button type="button" id="btnGeo" title="Insertar ubicación actual de prueba" style="padding: 0 10px; background: #e2e8f0; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">
+              <input type="text" id="reportLocation" class="form-control" placeholder="Ej: 3ra Calle Poniente frente a la tienda escolar" required />
+              <button type="button" id="btnGeo" title="Asignar punto de prueba o GPS" style="padding: 0 10px; background: #e2e8f0; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">
                 📍
               </button>
             </div>
           </div>
 
-          <!-- Campo 2: Zona o Barrio -->
+          <!-- Zona -->
           <div class="form-group">
             <label class="form-label" for="reportZoneSelect">Zona / Sector *</label>
             <select id="reportZoneSelect" class="form-control" required>
@@ -791,37 +903,37 @@
             </select>
           </div>
 
-          <!-- Campo 3: Descripción del problema -->
+          <!-- Descripción -->
           <div class="form-group">
-            <label class="form-label" for="reportDescription">Descripción del punto crítico *</label>
-            <textarea id="reportDescription" class="form-control" placeholder="Describe el estado (ej: Bolsas rotas con restos orgánicos, escombros en la cuneta...)" required></textarea>
+            <label class="form-label" for="reportDescription">Descripción del problema *</label>
+            <textarea id="reportDescription" class="form-control" placeholder="Describe qué tipo de desechos hay (bolsas rotas, escombros, ramas, etc.)..." required></textarea>
           </div>
 
-          <!-- Campo 4: Foto ficticia o archivo real -->
+          <!-- Foto real o muestra ficticia -->
           <div class="form-group">
             <label class="form-label">Foto de evidencia (foto real o muestra)</label>
             
             <div class="photo-upload-area" id="dropArea" onclick="document.getElementById('reportPhotoInput').click()">
               <div style="font-size: 26px; margin-bottom: 4px;">📷</div>
-              <div style="font-size: 13px; font-weight: 600; color: #334155;">Toca para tomar foto o elegir archivo</div>
-              <div style="font-size: 11px; color: #94a3b8;">Formatos JPG, PNG o simulación rápida abajo</div>
+              <div style="font-size: 13px; font-weight: 600; color: #334155;">Toca para cargar foto o usar cámara</div>
+              <div style="font-size: 11px; color: #94a3b8;">Formatos JPG, PNG o muestras rápidas abajo</div>
             </div>
             
             <input type="file" id="reportPhotoInput" accept="image/*" style="display: none;" />
 
-            <!-- Alternativa de Foto Ficticia / Campo de texto para pruebas rápidas -->
+            <!-- Alternativa de muestra ficticia -->
             <div style="margin-top: 8px;">
               <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O seleccionar foto de prueba:</span>
               </div>
               <div class="quick-sample-photos">
+                <button type="button" class="sample-pill" onclick="setSamplePhoto('bolsas')">🗑️ Bolsas acumuladas</button>
                 <button type="button" class="sample-pill" onclick="setSamplePhoto('escombros')">🏗️ Escombros</button>
-                <button type="button" class="sample-pill" onclick="setSamplePhoto('bolsas')">🗑️ Bolsas rotas</button>
                 <button type="button" class="sample-pill" onclick="setSamplePhoto('poda')">🌿 Restos de poda</button>
               </div>
             </div>
 
-            <!-- Vista previa de la foto seleccionada -->
+            <!-- Vista previa de foto -->
             <div class="photo-preview" id="photoPreviewContainer">
               <img id="previewImg" src="" alt="Vista previa del reporte" />
               <button type="button" class="remove-photo" id="btnRemovePhoto" title="Quitar imagen">✕</button>
@@ -829,21 +941,21 @@
           </div>
 
           <button type="submit" class="btn btn-primary" id="btnSubmitReport">
-            <span>📢</span>
-            <span>Enviar Reporte a la Alcaldía</span>
+            <span>🚀</span>
+            <span>Registrar y Enviar Reporte</span>
           </button>
         </form>
       </div>
 
-      <!-- Listado de Reportes Recientes -->
+      <!-- Listado de Reportes Guardados (Persistencia M2) -->
       <div style="margin-top: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <h3 style="font-size: 14px; font-weight: 700; color: #334155;">Reportes en tu comunidad</h3>
+          <h3 style="font-size: 14px; font-weight: 700; color: #334155;">Reportes Comunitarios Registrados</h3>
           <span id="reportsCountBadge" style="font-size: 11px; font-weight: 700; background: #e2e8f0; padding: 2px 8px; border-radius: 999px;">0</span>
         </div>
 
         <div id="reportsList" class="reports-list">
-          <!-- Renderizado dinámicamente -->
+          <!-- Renderizado dinámico desde localStorage -->
         </div>
       </div>
 
@@ -859,20 +971,20 @@
           <span>Registrar Tren de Aseo por Zona</span>
         </div>
         <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
-          Configura los días y horarios en los que el camión recolector pasa por cada barrio o sector.
+          Especifica los días y hora de recolección para que los vecinos reciban las alertas del día anterior.
         </p>
 
         <form id="zoneForm">
-          <!-- Nombre de la zona -->
+          <!-- Nombre de la Zona -->
           <div class="form-group">
-            <label class="form-label" for="zoneName">Nombre de la Zona o Colonia *</label>
-            <input type="text" id="zoneName" class="form-control" placeholder="Ej: Colonia Miramonte / Zona 3" required />
+            <label class="form-label" for="zoneName">Nombre de la Zona, Colonia o Barrio *</label>
+            <input type="text" id="zoneName" class="form-control" placeholder="Ej: Colonia Los Robles / Sector 4" required />
           </div>
 
-          <!-- Selección de días de recolección -->
+          <!-- Selección interactiva de Días -->
           <div class="form-group">
             <label class="form-label">Días de paso del tren de aseo *</label>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Toca los días que corresponden a esta zona:</p>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Selecciona los días correspondientes:</p>
             <div class="days-picker" id="daysPicker">
               <button type="button" class="day-btn" data-day="1">Lun</button>
               <button type="button" class="day-btn" data-day="2">Mar</button>
@@ -891,27 +1003,27 @@
             <input type="time" id="zoneTime" class="form-control" value="07:00" required />
           </div>
 
-          <!-- Nota o tipo de residuo -->
+          <!-- Recomendación opcional -->
           <div class="form-group">
-            <label class="form-label" for="zoneNotes">Observaciones o recomendaciones (opcional)</label>
-            <input type="text" id="zoneNotes" class="form-control" placeholder="Ej: Sacar desechos antes de las 6:30 AM" />
+            <label class="form-label" for="zoneNotes">Observaciones o turno (opcional)</label>
+            <input type="text" id="zoneNotes" class="form-control" placeholder="Ej: Ruta matutina - Sacar bolsas antes de las 6:30 AM" />
           </div>
 
           <button type="submit" class="btn btn-primary">
             <span>💾</span>
-            <span>Guardar Horario de Zona</span>
+            <span>Guardar Horario en el Sistema</span>
           </button>
         </form>
       </div>
 
-      <!-- Lista de Zonas Registradas -->
+      <!-- Lista de Zonas Guardadas (Persistencia M2) -->
       <div class="card">
         <div class="card-title">
           <span>📋</span>
           <span>Zonas Registradas</span>
         </div>
         <div id="registeredZonesList" class="zones-list">
-          <!-- Renderizado dinámico -->
+          <!-- Renderizado dinámico desde localStorage -->
         </div>
       </div>
 
@@ -926,7 +1038,7 @@
       <span>Alertas</span>
     </button>
     <button class="nav-item" onclick="switchTab('reports')" id="navReports">
-      <span class="nav-icon">📸</span>
+      <span class="nav-icon">📢</span>
       <span>Reportar</span>
     </button>
     <button class="nav-item" onclick="switchTab('zones')" id="navZones">
@@ -942,278 +1054,310 @@
   <script>
     /**
      * =========================================================================
-     * BASURA CERO - APLICACIÓN MUNICIPAL Y COMUNITARIA
-     * Arquitectura: Vanilla JS + LocalStorage sin dependencias externas
+     * BASURA CERO - SISTEMA MUNICIPAL Y COMUNITARIO
+     * Cumplimiento de MEJORA M1 (Avisos automáticos) y MEJORA M2 (Persistencia)
      * =========================================================================
      */
 
-    // Nombres legibles de días de la semana (0 = Domingo ... 6 = Sábado)
-    const DAY_NAMES = [
-      'Domingo',
-      'Lunes',
-      'Martes',
-      'Miércoles',
-      'Jueves',
-      'Viernes',
-      'Sábado'
-    ];
-
+    // Nombres y siglas en español de los días de la semana
+    const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const DAY_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-    // Imágenes de muestra codificadas en SVG liviano para pruebas sin internet
+    // Muestras SVG livianas para fotos ficticias
     const SAMPLE_PHOTOS = {
-      escombros: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23cbd5e1"/><polygon points="60,180 140,70 210,180" fill="%2364748b"/><polygon points="180,180 260,90 340,180" fill="%23475569"/><circle cx="200" cy="50" r="20" fill="%23f59e0b"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="16" fill="%23ffffff" text-anchor="middle">REPORTE: ESCOMBROS EN VÍA</text></svg>',
-      bolsas: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23fee2e2"/><ellipse cx="140" cy="130" rx="45" ry="50" fill="%231e293b"/><ellipse cx="210" cy="120" rx="55" ry="60" fill="%230f172a"/><ellipse cx="280" cy="140" rx="40" ry="45" fill="%23334155"/><path d="M120,80 Q140,60 160,80" stroke="%23f87171" stroke-width="4" fill="none"/><text x="200" y="175" font-family="sans-serif" font-weight="bold" font-size="16" fill="%23ffffff" text-anchor="middle">REPORTE: BOLSAS ACUMULADAS</text></svg>',
-      poda: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23dcfce7"/><ellipse cx="200" cy="120" rx="90" ry="60" fill="%2315803d"/><path d="M140,150 L120,180 M200,160 L200,190 M260,150 L280,180" stroke="%2378350f" stroke-width="6"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="16" fill="%23ffffff" text-anchor="middle">REPORTE: RESTOS DE PODA</text></svg>'
+      bolsas: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23fee2e2"/><ellipse cx="140" cy="130" rx="45" ry="50" fill="%231e293b"/><ellipse cx="210" cy="120" rx="55" ry="60" fill="%230f172a"/><ellipse cx="280" cy="140" rx="40" ry="45" fill="%23334155"/><path d="M120,80 Q140,60 160,80" stroke="%23f87171" stroke-width="4" fill="none"/><text x="200" y="175" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: BOLSAS FUERA DE HORARIO</text></svg>',
+      escombros: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23cbd5e1"/><polygon points="60,180 140,70 210,180" fill="%2364748b"/><polygon points="180,180 260,90 340,180" fill="%23475569"/><circle cx="200" cy="50" r="20" fill="%23f59e0b"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: ESCOMBROS EN ACERA</text></svg>',
+      poda: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23dcfce7"/><ellipse cx="200" cy="120" rx="90" ry="60" fill="%2315803d"/><path d="M140,150 L120,180 M200,160 L200,190 M260,150 L280,180" stroke="%2378350f" stroke-width="6"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: RESTOS DE PODA</text></svg>'
     };
 
-    // Datos iniciales de zonas (para que la app tenga contenido de muestra al abrir)
-    const DEFAULT_ZONES = [
-      {
-        id: 'zona-casco-central',
-        name: 'Casco Central / Zona Comercial',
-        days: [1, 3, 5], // Lunes, Miércoles, Viernes
-        time: '06:30',
-        notes: 'Sacar basura antes de las 6:00 AM'
-      },
-      {
-        id: 'zona-san-antonio',
-        name: 'Colonia San Antonio',
-        days: [2, 4, 6], // Martes, Jueves, Sábado
-        time: '08:00',
-        notes: 'Ruta matutina residencial'
-      },
-      {
-        id: 'zona-los-laureles',
-        name: 'Barrio Los Laureles',
-        days: [2, 5], // Martes y Viernes
-        time: '14:30',
-        notes: 'Ruta vespertina'
-      }
-    ];
+    // =========================================================================
+    // MEJORA M2: DATOS DE EJEMPLO (MOCKUP) PARA CUANDO LOCALSTORAGE ESTÁ VACÍO
+    // =========================================================================
+    function getMockupZones() {
+      // Calculamos dinámicamente el día de mañana para que al abrir la app SIEMPRE haya una zona activa
+      // con recolección programada para mañana, garantizando la visualización de la MEJORA M1 de inmediato.
+      const today = new Date().getDay();
+      const tomorrow = (today + 1) % 7;
+      const dayAfterTomorrow = (today + 2) % 7;
 
-    // Reportes iniciales de muestra
-    const DEFAULT_REPORTS = [
-      {
-        id: 'rep-1',
-        location: '3ra Calle Oriente y 2da Avenida Sur',
-        zoneId: 'zona-casco-central',
-        zoneName: 'Casco Central / Zona Comercial',
-        description: 'Montículo de bolsas plásticas rotas dejadas en la acera fuera del horario establecido.',
-        photo: SAMPLE_PHOTOS.bolsas,
-        status: 'pending',
-        timestamp: new Date(Date.now() - 3600000 * 4).toISOString() // Hace 4 horas
-      },
-      {
-        id: 'rep-2',
-        location: 'Pasaje Las Flores frente al lote 14',
-        zoneId: 'zona-san-antonio',
-        zoneName: 'Colonia San Antonio',
-        description: 'Restos de ramas secas y escombros bloqueando la cuneta de desagüe.',
-        photo: SAMPLE_PHOTOS.poda,
-        status: 'resolved',
-        timestamp: new Date(Date.now() - 3600000 * 26).toISOString() // Ayer
-      }
-    ];
+      return [
+        {
+          id: 'zona-casco-urbano',
+          name: 'Zona 1 - Casco Central y Mercado',
+          days: [tomorrow, (tomorrow + 3) % 7], // Incluye explícitamente mañana
+          time: '06:30',
+          notes: 'Ruta prioritaria - Sacar antes de las 6:00 AM'
+        },
+        {
+          id: 'zona-colonia-san-jose',
+          name: 'Zona 2 - Colonia San José',
+          days: [today, dayAfterTomorrow], // Incluye hoy
+          time: '08:00',
+          notes: 'Ruta matutina residencial'
+        },
+        {
+          id: 'zona-barrio-el-calvario',
+          name: 'Zona 3 - Barrio El Calvario',
+          days: [1, 3, 5], // Lunes, Miércoles, Viernes
+          time: '14:00',
+          notes: 'Ruta vespertina'
+        }
+      ];
+    }
+
+    function getMockupReports() {
+      return [
+        {
+          id: 'rep-mock-1',
+          location: '4ta Calle Poniente y 1ra Avenida Norte',
+          zoneId: 'zona-casco-urbano',
+          zoneName: 'Zona 1 - Casco Central y Mercado',
+          description: 'Acumulación de varias bolsas de desecho en la esquina junto al poste de luz fuera del horario del tren de aseo.',
+          photo: SAMPLE_PHOTOS.bolsas,
+          status: 'pending',
+          timestamp: new Date(Date.now() - 3600000 * 2).toISOString()
+        },
+        {
+          id: 'rep-mock-2',
+          location: 'Avenida Las Palmeras, frente al pasaje 3',
+          zoneId: 'zona-colonia-san-jose',
+          zoneName: 'Zona 2 - Colonia San José',
+          description: 'Escombros y restos de construcción dejados en la cuneta obstruyendo el paso del agua.',
+          photo: SAMPLE_PHOTOS.escombros,
+          status: 'resolved',
+          timestamp: new Date(Date.now() - 3600000 * 20).toISOString()
+        }
+      ];
+    }
 
     // =========================================================================
-    // ESTADO LOCAL DE LA APLICACIÓN
+    // ESTADO DE LA APLICACIÓN
     // =========================================================================
     let appState = {
       zones: [],
       reports: [],
       activeZoneId: '',
-      simulatedDay: -1, // -1 significa usar el día real del reloj del navegador
+      consultDate: new Date(), // Fecha actual o seleccionada por el usuario
       selectedPhotoData: null
     };
 
     // =========================================================================
-    // INICIALIZACIÓN
+    // MEJORA M2: GESTIÓN Y PERSISTENCIA ROBUSTA EN LOCALSTORAGE
     // =========================================================================
-    function initApp() {
-      loadStorage();
-      setupEventListeners();
-      renderActiveZoneSelects();
-      renderAlertsAndSchedule();
-      renderReports();
-      renderZonesList();
-    }
+    const STORAGE_KEY_ZONES = 'basura_cero_zonas_data';
+    const STORAGE_KEY_REPORTS = 'basura_cero_reportes_data';
+    const STORAGE_KEY_ACTIVE_ZONE = 'basura_cero_active_zone_id';
 
-    // Carga de LocalStorage con inicialización segura
-    function loadStorage() {
+    function loadLocalStorageData() {
+      // 1. Cargar Zonas o inicializar Mockup si está vacío
       try {
-        const storedZones = localStorage.getItem('basura_cero_zones');
-        if (storedZones) {
-          appState.zones = JSON.parse(storedZones);
+        const rawZones = localStorage.getItem(STORAGE_KEY_ZONES);
+        if (rawZones) {
+          const parsed = JSON.parse(rawZones);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            appState.zones = parsed;
+          } else {
+            appState.zones = getMockupZones();
+            saveZonesToStorage();
+          }
         } else {
-          appState.zones = DEFAULT_ZONES;
-          saveZones();
+          appState.zones = getMockupZones();
+          saveZonesToStorage();
         }
+      } catch (err) {
+        console.warn('Error al leer zonas de localStorage, cargando mockup:', err);
+        appState.zones = getMockupZones();
+        saveZonesToStorage();
+      }
 
-        const storedReports = localStorage.getItem('basura_cero_reports');
-        if (storedReports) {
-          appState.reports = JSON.parse(storedReports);
+      // 2. Cargar Reportes o inicializar Mockup si está vacío
+      try {
+        const rawReports = localStorage.getItem(STORAGE_KEY_REPORTS);
+        if (rawReports) {
+          const parsed = JSON.parse(rawReports);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            appState.reports = parsed;
+          } else {
+            appState.reports = getMockupReports();
+            saveReportsToStorage();
+          }
         } else {
-          appState.reports = DEFAULT_REPORTS;
-          saveReports();
+          appState.reports = getMockupReports();
+          saveReportsToStorage();
         }
+      } catch (err) {
+        console.warn('Error al leer reportes de localStorage, cargando mockup:', err);
+        appState.reports = getMockupReports();
+        saveReportsToStorage();
+      }
 
-        const storedActiveZone = localStorage.getItem('basura_cero_active_zone');
-        if (storedActiveZone && appState.zones.some(z => z.id === storedActiveZone)) {
-          appState.activeZoneId = storedActiveZone;
-        } else if (appState.zones.length > 0) {
-          appState.activeZoneId = appState.zones[0].id;
-        }
+      // 3. Cargar Zona Activa
+      const savedActiveZone = localStorage.getItem(STORAGE_KEY_ACTIVE_ZONE);
+      if (savedActiveZone && appState.zones.some(z => z.id === savedActiveZone)) {
+        appState.activeZoneId = savedActiveZone;
+      } else if (appState.zones.length > 0) {
+        appState.activeZoneId = appState.zones[0].id;
+        localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, appState.activeZoneId);
+      }
+    }
+
+    function saveZonesToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_ZONES, JSON.stringify(appState.zones));
       } catch (e) {
-        console.error('Error al cargar LocalStorage:', e);
-        appState.zones = DEFAULT_ZONES;
-        appState.reports = DEFAULT_REPORTS;
-        appState.activeZoneId = DEFAULT_ZONES[0].id;
+        console.error('Error guardando zonas en localStorage:', e);
       }
     }
 
-    function saveZones() {
-      localStorage.setItem('basura_cero_zones', JSON.stringify(appState.zones));
-    }
-
-    function saveReports() {
-      localStorage.setItem('basura_cero_reports', JSON.stringify(appState.reports));
-    }
-
-    // =========================================================================
-    // CÁLCULO DE FECHAS Y ALERTA VISUAL DEL DÍA ANTERIOR (FUNCIÓN 2)
-    // =========================================================================
-    /**
-     * Obtiene el índice de día de la semana actual (0 = Domingo ... 6 = Sábado),
-     * respetando si el usuario está usando el simulador de días.
-     */
-    function getCurrentDayIndex() {
-      if (appState.simulatedDay !== -1) {
-        return parseInt(appState.simulatedDay, 10);
+    function saveReportsToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_REPORTS, JSON.stringify(appState.reports));
+      } catch (e) {
+        console.error('Error guardando reportes en localStorage:', e);
       }
-      return new Date().getDay();
     }
 
+    // =========================================================================
+    // MEJORA M1: VERIFICACIÓN AUTOMÁTICA DEL DÍA ANTERIOR AL ABRIR O CAMBIAR FECHA
+    // =========================================================================
+
     /**
-     * Calcula la relación entre hoy y los días de paso del tren de aseo
-     * Retorna si hoy es día de paso, si mañana es día de paso, o en cuántos días pasa.
+     * Calcula la relación entre la fecha seleccionada y los días del tren de aseo.
+     * Retorna si mañana pasa el tren, si hoy pasa el tren, o la fecha más próxima.
      */
-    function calculateCollectionStatus(zoneDays) {
+    function evaluateZoneSchedule(zoneDays, referenceDate) {
       if (!zoneDays || zoneDays.length === 0) {
-        return { isToday: false, isTomorrow: false, nextDayName: null, daysLeft: 0 };
+        return { isTomorrow: false, isToday: false, daysUntil: 0, nextDayName: null, tomorrowDateStr: '' };
       }
 
-      const today = getCurrentDayIndex();
-      const tomorrow = (today + 1) % 7;
+      // Día de la semana de la fecha de referencia (0 = Domingo ... 6 = Sábado)
+      const currentDayOfWeek = referenceDate.getDay();
 
-      const isToday = zoneDays.includes(today);
-      const isTomorrow = zoneDays.includes(tomorrow);
+      // Mañana es el día de referencia + 1
+      const tomorrowDate = new Date(referenceDate);
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      const tomorrowDayOfWeek = tomorrowDate.getDay();
 
-      // Calcular el próximo día más cercano
+      // Verificación directa: ¿El tren pasa mañana en esta zona?
+      const isTomorrow = zoneDays.includes(tomorrowDayOfWeek);
+      const isToday = zoneDays.includes(currentDayOfWeek);
+
+      // Calcular cuántos días faltan para la próxima pasada
       let minDiff = 8;
-      let nextDay = null;
+      let nextDayOfWeek = null;
 
       zoneDays.forEach(day => {
-        let diff = (day - today + 7) % 7;
+        let diff = (day - currentDayOfWeek + 7) % 7;
         if (diff === 0) diff = 7; // Si es hoy, la próxima vuelta es en 7 días
         if (diff < minDiff) {
           minDiff = diff;
-          nextDay = day;
+          nextDayOfWeek = day;
         }
       });
 
+      // Cadena formateada para la fecha de mañana
+      const tomorrowFormatted = `${DAY_NAMES[tomorrowDayOfWeek]}, ${tomorrowDate.getDate()} de ${MONTH_NAMES[tomorrowDate.getMonth()]}`;
+
       return {
-        isToday,
         isTomorrow,
-        nextDayIndex: nextDay,
-        nextDayName: DAY_NAMES[nextDay],
-        daysLeft: minDiff
+        isToday,
+        tomorrowDayOfWeek,
+        tomorrowDateStr: tomorrowFormatted,
+        daysUntil: minDiff,
+        nextDayName: DAY_NAMES[nextDayOfWeek]
       };
     }
 
     /**
-     * Renderiza el componente de Alerta Visual y el resumen de la zona
+     * MEJORA M1: Despliega el aviso visual destacado en amarillo/naranja
+     * cada vez que se abre la app o se selecciona la fecha / zona.
      */
-    function renderAlertsAndSchedule() {
+    function renderAlertBanner() {
       const container = document.getElementById('alertContainer');
-      const summaryContainer = document.getElementById('currentZoneSummary');
       const activeZone = appState.zones.find(z => z.id === appState.activeZoneId);
 
       if (!activeZone) {
         container.innerHTML = `
           <div class="alert-banner alert-info">
             <div class="alert-header">
-              <span class="alert-icon">📍</span>
-              <div>
-                <h2 class="alert-title">Selecciona una zona</h2>
-                <p class="alert-desc">Elige tu sector o colonia para ver las alertas del tren de aseo.</p>
+              <span class="alert-icon-wrap">📍</span>
+              <div class="alert-content">
+                <h2 class="alert-title">Selecciona una Zona</h2>
+                <p class="alert-desc">Elige tu sector o colonia en el menú superior para verificar los días de recolección.</p>
               </div>
             </div>
           </div>
         `;
-        summaryContainer.innerHTML = '<p style="color:#64748b; font-size:13px;">No hay zona seleccionada.</p>';
         return;
       }
 
-      const status = calculateCollectionStatus(activeZone.days);
+      const evalResult = evaluateZoneSchedule(activeZone.days, appState.consultDate);
       const formattedTime = formatTime12h(activeZone.time);
 
-      // CASO 1: ¡MAÑANA ES EL DÍA DE RECOLECCIÓN! (ALERTA VISUAL PRINCIPAL)
-      if (status.isTomorrow) {
+      // =======================================================================
+      // CASO M1: ¡MAÑANA PASA EL TREN DE ASEO! (Aviso destacado en amarillo/naranja)
+      // =======================================================================
+      if (evalResult.isTomorrow) {
         container.innerHTML = `
           <div class="alert-banner alert-warning" role="alert">
             <div class="alert-header">
-              <span class="alert-icon">🔔</span>
-              <div style="flex:1;">
-                <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-                  <span class="pulse-dot"></span>
-                  <span class="alert-badge badge-warning">¡AVISO: DÍA ANTERIOR!</span>
+              <div class="alert-icon-wrap">🔔</div>
+              <div class="alert-content">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="alert-badge badge-warning">
+                    <span class="pulsing-beacon"></span>
+                    ¡AVISO IMPORTANTE: DÍA ANTERIOR!
+                  </span>
                 </div>
+                
                 <h2 class="alert-title">MAÑANA PASA EL TREN DE ASEO</h2>
+                
                 <p class="alert-desc">
-                  En <strong>${escapeHtml(activeZone.name)}</strong>, el camión recolector pasará mañana <strong>${DAY_NAMES[(getCurrentDayIndex() + 1) % 7]}</strong> a las <strong>${formattedTime}</strong>.
+                  En <strong>${escapeHtml(activeZone.name)}</strong>, la recolección pasará mañana <strong>${evalResult.tomorrowDateStr}</strong> a las <strong>${formattedTime}</strong>.
                 </p>
-                <div class="alert-time-box">
-                  <span>⏰</span>
-                  <span>Sacar la basura hoy por la noche o antes de las ${formattedTime}</span>
+
+                <div class="alert-action-pill">
+                  <span>⚠️</span>
+                  <span><strong>Acción preventiva:</strong> Sacar la basura hoy por la noche o antes de las ${formattedTime}</span>
                 </div>
               </div>
             </div>
           </div>
         `;
-      } 
+      }
       // CASO 2: ¡HOY ES DÍA DE RECOLECCIÓN!
-      else if (status.isToday) {
+      else if (evalResult.isToday) {
         container.innerHTML = `
           <div class="alert-banner alert-today" role="alert">
             <div class="alert-header">
-              <span class="alert-icon">🚛</span>
-              <div style="flex:1;">
+              <div class="alert-icon-wrap">🚛</div>
+              <div class="alert-content">
                 <span class="alert-badge badge-today">¡HOY ES DÍA DE PASO!</span>
                 <h2 class="alert-title">EL TREN DE ASEO PASA HOY</h2>
                 <p class="alert-desc">
-                  Horario programado: <strong>${formattedTime}</strong> en <strong>${escapeHtml(activeZone.name)}</strong>.
+                  Ruta activa hoy en <strong>${escapeHtml(activeZone.name)}</strong>. Hora programada: <strong>${formattedTime}</strong>.
                 </p>
-                <div class="alert-time-box">
+                <div class="alert-action-pill">
                   <span>✅</span>
-                  <span>Ruta activa durante el día</span>
+                  <span>Ruta municipal en marcha durante el día</span>
                 </div>
               </div>
             </div>
           </div>
         `;
-      } 
+      }
       // CASO 3: FALTAN 2 O MÁS DÍAS
       else {
         container.innerHTML = `
           <div class="alert-banner alert-info" role="status">
             <div class="alert-header">
-              <span class="alert-icon">📅</span>
-              <div style="flex:1;">
-                <span class="alert-badge badge-info">Próxima recolección</span>
-                <h2 class="alert-title" style="color:#1e293b;">Próximo paso: ${status.nextDayName}</h2>
+              <div class="alert-icon-wrap">📅</div>
+              <div class="alert-content">
+                <span class="alert-badge badge-info">Próxima Recolección</span>
+                <h2 class="alert-title" style="color:#1e293b;">Próximo paso: ${evalResult.nextDayName}</h2>
                 <p class="alert-desc">
-                  Faltan <strong>${status.daysLeft} días</strong> para el tren de aseo (${formattedTime}). No saques la basura aún para evitar animales y malos olores.
+                  Faltan <strong>${evalResult.daysUntil} días</strong> para el paso del tren de aseo (${formattedTime}). Por favor, mantené tus bolsas dentro de tu vivienda para evitar acumulación en la calle.
                 </p>
               </div>
             </div>
@@ -1221,7 +1365,14 @@
         `;
       }
 
-      // Renderizar resumen de días de la zona activa
+      // Renderizar resumen informativo de la zona
+      renderZoneSummary(activeZone, formattedTime);
+    }
+
+    function renderZoneSummary(activeZone, formattedTime) {
+      const summaryContainer = document.getElementById('currentZoneSummary');
+      if (!summaryContainer) return;
+
       const daysChips = activeZone.days
         .slice()
         .sort((a,b) => ((a === 0 ? 7 : a) - (b === 0 ? 7 : b)))
@@ -1231,30 +1382,89 @@
       summaryContainer.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
           <div>
-            <h3 style="font-size:16px; font-weight:700; color:#0f172a;">${escapeHtml(activeZone.name)}</h3>
-            <p style="font-size:12.5px; color:#64748b; margin-top:2px;">${escapeHtml(activeZone.notes || 'Ruta estándar')}</p>
+            <h3 style="font-size:15px; font-weight:700; color:#0f172a;">${escapeHtml(activeZone.name)}</h3>
+            <p style="font-size:12.5px; color:#64748b; margin-top:2px;">${escapeHtml(activeZone.notes || 'Ruta regular')}</p>
           </div>
           <div style="text-align:right;">
             <div style="font-size:15px; font-weight:800; color:#059669;">${formattedTime}</div>
-            <div style="font-size:11px; color:#94a3b8;">Hora programada</div>
+            <div style="font-size:11px; color:#94a3b8;">Hora habitual</div>
           </div>
         </div>
         <div>
-          <div style="font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Días de recolección semanal:</div>
+          <div style="font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Días de recolección en esta zona:</div>
           <div style="display:flex; flex-wrap:wrap; gap:6px;">${daysChips}</div>
         </div>
       `;
     }
 
     // =========================================================================
-    // FUNCIÓN 1: REGISTRAR DÍAS Y HORA POR ZONA
+    // INICIALIZACIÓN DE LA APLICACIÓN
+    // =========================================================================
+    function initApp() {
+      // 1. Cargar persistencia con localStorage o mockup
+      loadLocalStorageData();
+
+      // 2. Inicializar selector de fecha con HOY (MEJORA M1)
+      setupDateControl();
+
+      // 3. Vincular formularios y eventos
+      setupEventListeners();
+
+      // 4. Renderizar selectores, alertas y listados
+      renderZoneSelectDropdowns();
+      renderAlertBanner();
+      renderReportsList();
+      renderZonesManagementList();
+    }
+
+    /**
+     * Configuración del control de fecha (MEJORA M1)
+     */
+    function setupDateControl() {
+      const datePicker = document.getElementById('dateConsultPicker');
+      const btnToday = document.getElementById('btnSetTodayDate');
+
+      // Formato YYYY-MM-DD para el input type="date"
+      const now = new Date();
+      datePicker.value = formatDateForInput(now);
+      appState.consultDate = now;
+
+      // Evento al cambiar la fecha en el calendario
+      datePicker.addEventListener('change', (e) => {
+        if (e.target.value) {
+          // Parsear fecha local sin desfase de zona horaria
+          const [year, month, day] = e.target.value.split('-').map(Number);
+          appState.consultDate = new Date(year, month - 1, day);
+          renderAlertBanner();
+          showToast(`Fecha de consulta actualizada: ${DAY_NAMES[appState.consultDate.getDay()]}`);
+        }
+      });
+
+      // Botón rápido para volver al día de hoy
+      btnToday.addEventListener('click', () => {
+        const today = new Date();
+        datePicker.value = formatDateForInput(today);
+        appState.consultDate = today;
+        renderAlertBanner();
+        showToast('Consultando día de hoy');
+      });
+    }
+
+    function formatDateForInput(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // =========================================================================
+    // REGISTRO DE ZONAS (FUNCIÓN 1)
     // =========================================================================
     function setupZoneRegistration() {
       const zoneForm = document.getElementById('zoneForm');
       const daysButtons = document.querySelectorAll('#daysPicker .day-btn');
       let selectedDays = [];
 
-      // Control interactivo de botones de días
       daysButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           const dayNum = parseInt(btn.dataset.day, 10);
@@ -1269,29 +1479,23 @@
         });
       });
 
-      // Envío del formulario de zona
       zoneForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const nameInput = document.getElementById('zoneName');
-        const timeInput = document.getElementById('zoneTime');
-        const notesInput = document.getElementById('zoneNotes');
-
-        const name = nameInput.value.trim();
-        const time = timeInput.value;
-        const notes = notesInput.value.trim();
+        const name = document.getElementById('zoneName').value.trim();
+        const time = document.getElementById('zoneTime').value;
+        const notes = document.getElementById('zoneNotes').value.trim();
 
         if (selectedDays.length === 0) {
-          showToast('Selecciona al menos un día de recolección');
+          showToast('Selecciona al menos un día de la semana');
           return;
         }
 
         if (!name || !time) {
-          showToast('Por favor completa el nombre y la hora');
+          showToast('Completa el nombre y la hora');
           return;
         }
 
-        // Crear nueva zona
         const newZone = {
           id: 'zona-' + Date.now(),
           name,
@@ -1300,35 +1504,34 @@
           notes
         };
 
+        // Guardar en el estado y en localStorage (MEJORA M2)
         appState.zones.push(newZone);
-        appState.activeZoneId = newZone.id; // Activar la zona creada
-        saveZones();
+        appState.activeZoneId = newZone.id;
+        localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, newZone.id);
+        saveZonesToStorage();
 
-        // Resetear formulario
+        // Limpiar formulario
         zoneForm.reset();
         selectedDays = [];
         daysButtons.forEach(btn => btn.classList.remove('selected'));
         document.getElementById('selectedDaysInput').value = '';
 
         // Actualizar vistas
-        renderActiveZoneSelects();
-        renderAlertsAndSchedule();
-        renderZonesList();
+        renderZoneSelectDropdowns();
+        renderAlertBanner();
+        renderZonesManagementList();
 
-        showToast(`¡Zona "${name}" registrada exitosamente!`);
-        switchTab('alerts'); // Regresar a la vista de alertas
+        showToast(`¡Zona "${name}" guardada con éxito!`);
+        switchTab('alerts');
       });
     }
 
-    /**
-     * Renderiza la lista de zonas en la pestaña de configuración
-     */
-    function renderZonesList() {
+    function renderZonesManagementList() {
       const container = document.getElementById('registeredZonesList');
       if (!container) return;
 
       if (appState.zones.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📍</div><p>No hay zonas registradas aún.</p></div>';
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📍</div><p>No hay zonas registradas.</p></div>';
         return;
       }
 
@@ -1361,31 +1564,32 @@
 
     function selectActiveZone(zoneId) {
       appState.activeZoneId = zoneId;
-      localStorage.setItem('basura_cero_active_zone', zoneId);
-      renderActiveZoneSelects();
-      renderAlertsAndSchedule();
-      renderZonesList();
+      localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, zoneId);
+      renderZoneSelectDropdowns();
+      renderAlertBanner();
+      renderZonesManagementList();
       showToast('Zona activa actualizada');
     }
 
     function deleteZone(zoneId) {
       if (appState.zones.length <= 1) {
-        showToast('Debe existir al menos una zona en el sistema');
+        showToast('Debe existir al menos una zona');
         return;
       }
       appState.zones = appState.zones.filter(z => z.id !== zoneId);
       if (appState.activeZoneId === zoneId) {
         appState.activeZoneId = appState.zones[0].id;
+        localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, appState.activeZoneId);
       }
-      saveZones();
-      renderActiveZoneSelects();
-      renderAlertsAndSchedule();
-      renderZonesList();
+      saveZonesToStorage();
+      renderZoneSelectDropdowns();
+      renderAlertBanner();
+      renderZonesManagementList();
       showToast('Zona eliminada');
     }
 
     // =========================================================================
-    // FUNCIÓN 3: FORMULARIO Y LISTADO DE REPORTES DE BASURA
+    // REPORTES COMUNITARIOS DE BASURA (FUNCIÓN 3)
     // =========================================================================
     function setupReportForm() {
       const reportForm = document.getElementById('reportForm');
@@ -1393,7 +1597,6 @@
       const btnRemovePhoto = document.getElementById('btnRemovePhoto');
       const btnGeo = document.getElementById('btnGeo');
 
-      // Carga de foto real mediante input file
       photoInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -1405,34 +1608,31 @@
         }
       });
 
-      // Quitar foto
       btnRemovePhoto.addEventListener('click', (e) => {
         e.stopPropagation();
         clearPhotoPreview();
       });
 
-      // Botón de geolocalización rápida / dirección de prueba
       btnGeo.addEventListener('click', () => {
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition(
             (pos) => {
               const coords = `Coord: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
               document.getElementById('reportLocation').value = coords;
-              showToast('Ubicación GPS capturada');
+              showToast('Ubicación capturada');
             },
             () => {
-              document.getElementById('reportLocation').value = 'Calle Principal frente al Parque Central';
-              showToast('Ubicación de referencia asignada');
+              document.getElementById('reportLocation').value = 'Calle Municipal frente a Escuela San Martín';
+              showToast('Ubicación asignada');
             },
             { timeout: 3000 }
           );
         } else {
-          document.getElementById('reportLocation').value = 'Calle Principal frente al Parque Central';
+          document.getElementById('reportLocation').value = 'Calle Municipal frente a Escuela San Martín';
           showToast('Ubicación asignada');
         }
       });
 
-      // Enviar reporte
       reportForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -1447,7 +1647,6 @@
           return;
         }
 
-        // Si no seleccionó foto, usar una foto ficticia por defecto para el reporte
         const photoToSave = appState.selectedPhotoData || SAMPLE_PHOTOS.bolsas;
 
         const newReport = {
@@ -1461,19 +1660,17 @@
           timestamp: new Date().toISOString()
         };
 
-        // Guardar reporte al inicio de la lista
+        // Guardar reporte en el estado y en localStorage (MEJORA M2)
         appState.reports.unshift(newReport);
-        saveReports();
+        saveReportsToStorage();
 
-        // Limpiar formulario
+        // Resetear formulario
         reportForm.reset();
         clearPhotoPreview();
 
-        // Actualizar visualización de reportes
-        renderReports();
-        showToast('¡Reporte enviado exitosamente a la alcaldía!');
+        renderReportsList();
+        showToast('¡Reporte guardado y enviado a la alcaldía!');
 
-        // Scroll suave al listado
         document.getElementById('reportsList').scrollIntoView({ behavior: 'smooth' });
       });
     }
@@ -1500,10 +1697,7 @@
       document.getElementById('previewImg').src = '';
     }
 
-    /**
-     * Renderiza los reportes registrados
-     */
-    function renderReports() {
+    function renderReportsList() {
       const container = document.getElementById('reportsList');
       const badge = document.getElementById('reportsCountBadge');
       if (!container) return;
@@ -1515,7 +1709,7 @@
           <div class="empty-state">
             <div class="empty-icon">✨</div>
             <p style="font-weight:600;">No hay reportes de basura pendientes.</p>
-            <p style="font-size:12px;">¡Las calles de tu zona están limpias!</p>
+            <p style="font-size:12px;">¡Las calles de tu comunidad están limpias!</p>
           </div>
         `;
         return;
@@ -1565,23 +1759,23 @@
       const rep = appState.reports.find(r => r.id === reportId);
       if (rep) {
         rep.status = 'resolved';
-        saveReports();
-        renderReports();
-        showToast('Reporte marcado como solucionado por la cuadrilla');
+        saveReportsToStorage();
+        renderReportsList();
+        showToast('Reporte marcado como limpio');
       }
     }
 
     function deleteReport(reportId) {
       appState.reports = appState.reports.filter(r => r.id !== reportId);
-      saveReports();
-      renderReports();
+      saveReportsToStorage();
+      renderReportsList();
       showToast('Reporte eliminado');
     }
 
     // =========================================================================
-    // CONTROLADORES Y SELECTORES DE ZONA
+    // SELECTORES DE ZONA Y NAVEGACIÓN
     // =========================================================================
-    function renderActiveZoneSelects() {
+    function renderZoneSelectDropdowns() {
       const headerSelect = document.getElementById('activeZoneSelect');
       const formSelect = document.getElementById('reportZoneSelect');
 
@@ -1597,18 +1791,14 @@
       formSelect.innerHTML = optionsHtml;
     }
 
-    // =========================================================================
-    // NAVEGACIÓN ENTRE SECCIONES (TABS)
-    // =========================================================================
     window.switchTab = function(tabName) {
-      // Ocultar todas las secciones
       document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
 
       if (tabName === 'alerts') {
         document.getElementById('viewAlerts').classList.add('active');
         document.getElementById('navAlerts').classList.add('active');
-        renderAlertsAndSchedule();
+        renderAlertBanner();
       } else if (tabName === 'reports') {
         document.getElementById('viewReports').classList.add('active');
         document.getElementById('navReports').classList.add('active');
@@ -1620,34 +1810,37 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // =========================================================================
-    // EVENT LISTENERS GENERALES
-    // =========================================================================
     function setupEventListeners() {
-      // Selector de zona activa en la cabecera
+      // Cambio de zona activa en la cabecera
       document.getElementById('activeZoneSelect').addEventListener('change', (e) => {
         appState.activeZoneId = e.target.value;
-        localStorage.setItem('basura_cero_active_zone', appState.activeZoneId);
-        renderAlertsAndSchedule();
-        renderZonesList();
-        showToast('Zona cambiada');
+        localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, appState.activeZoneId);
+        renderAlertBanner();
+        renderZonesManagementList();
+        showToast('Zona actualizada');
       });
 
-      // Simulador de día para pruebas del aviso de día anterior
-      document.getElementById('simulatedDaySelect').addEventListener('change', (e) => {
-        appState.simulatedDay = parseInt(e.target.value, 10);
-        renderAlertsAndSchedule();
-        const label = e.target.options[e.target.selectedIndex].text;
-        showToast(`Simulando día: ${label}`);
+      // Botón para restablecer datos de ejemplo (MEJORA M2)
+      document.getElementById('btnResetMockupData').addEventListener('click', () => {
+        if (confirm('¿Deseas restablecer los datos de ejemplo iniciales (Mockup)?')) {
+          localStorage.removeItem(STORAGE_KEY_ZONES);
+          localStorage.removeItem(STORAGE_KEY_REPORTS);
+          localStorage.removeItem(STORAGE_KEY_ACTIVE_ZONE);
+          loadLocalStorageData();
+          renderZoneSelectDropdowns();
+          renderAlertBanner();
+          renderReportsList();
+          renderZonesManagementList();
+          showToast('Datos de ejemplo restablecidos');
+        }
       });
 
-      // Inicializar submódulos
       setupZoneRegistration();
       setupReportForm();
     }
 
     // =========================================================================
-    // UTILIDADES
+    // UTILIDADES GENERALES
     // =========================================================================
     function showToast(message) {
       const toast = document.getElementById('toast');
@@ -1694,9 +1887,7 @@
       return String(text).replace(/[&<>"']/g, m => map[m]);
     }
 
-    // =========================================================================
-    // ARRANQUE DE LA APLICACIÓN AL CARGAR EL DOM
-    // =========================================================================
+    // Arranque de la app
     document.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
