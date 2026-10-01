@@ -10,7 +10,7 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Estilos CSS3 Integrados: Mobile-First, Moderno, Limpio y Accesible -->
+  <!-- Estilos CSS3 Integrados: Mobile-First, Responsive desde 320px, Accesible y Ergonómico -->
   <style>
     :root {
       --primary: #059669;            /* Verde esmeralda municipal */
@@ -18,19 +18,23 @@
       --primary-light: #d1fae5;
       --primary-subtle: #ecfdf5;
       
-      /* Colores para la Alerta Visual Destacada (Amarillo / Naranja) */
+      /* M1: Alerta visual destacada en amarillo/naranja */
       --alert-warning-bg: linear-gradient(135deg, #fffbeb 0%, #fef3c7 45%, #fed7aa 100%);
       --alert-warning-border: #f59e0b;
       --alert-warning-badge: #d97706;
       --alert-warning-text: #7c2d12;
-      --alert-warning-glow: rgba(245, 158, 11, 0.4);
+      --alert-warning-glow: rgba(245, 158, 11, 0.35);
 
       --alert-today-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
       --alert-today-border: #10b981;
       --alert-today-text: #064e3b;
 
+      /* M4: Caja de alerta de error en rojo accesible */
       --danger: #dc2626;
+      --danger-dark: #991b1b;
       --danger-light: #fee2e2;
+      --danger-border: #f87171;
+
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -38,9 +42,9 @@
       --border: #e2e8f0;
       --radius: 16px;
       --radius-sm: 10px;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.09), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
     }
 
     * {
@@ -55,18 +59,27 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding-bottom: 86px; /* Espacio para barra fija móvil */
+      padding-bottom: 90px; /* Margen inferior para que la barra móvil no tape contenido */
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Contenedor centralizado para celulares y tablets */
+    /* M3: Contenedor 100% fluido desde 320px de ancho y cómodo para uso con una sola mano */
     .app-container {
+      width: 100%;
       max-width: 520px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 12px;
     }
 
-    /* Cabecera de la Aplicación */
+    @media (min-width: 400px) {
+      .app-container {
+        padding: 16px;
+      }
+    }
+
+    /* Cabecera Principal */
     header.app-header {
       background: #ffffff;
       border-bottom: 1px solid var(--border);
@@ -79,55 +92,72 @@
     .header-content {
       max-width: 520px;
       margin: 0 auto;
-      padding: 12px 16px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      min-width: 0; /* Previene desbordamiento en pantallas de 320px */
     }
 
     .brand-icon {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      border-radius: 10px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+      font-size: 19px;
+      box-shadow: 0 2px 5px rgba(5, 150, 105, 0.3);
       flex-shrink: 0;
     }
 
+    .brand-text {
+      min-width: 0;
+    }
+
     .brand-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       color: #064e3b;
       letter-spacing: -0.4px;
       line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .brand-subtitle {
-      font-size: 11px;
+      font-size: 10.5px;
       color: #059669;
       font-weight: 600;
+      white-space: nowrap;
+      display: block;
     }
 
     .header-zone-selector {
       text-align: right;
-      min-width: 140px;
+      flex-shrink: 0;
+      max-width: 140px;
+    }
+
+    @media (min-width: 380px) {
+      .header-zone-selector {
+        max-width: 170px;
+      }
     }
 
     .header-zone-selector label {
       display: block;
-      font-size: 10px;
+      font-size: 9.5px;
       color: var(--text-muted);
       font-weight: 700;
       text-transform: uppercase;
@@ -139,57 +169,62 @@
       background: #f1f5f9;
       border: 1.5px solid #cbd5e1;
       border-radius: 8px;
-      padding: 5px 8px;
+      padding: 6px 6px;
       font-size: 12px;
       font-weight: 700;
       color: #0f172a;
       cursor: pointer;
       outline: none;
+      min-height: 34px;
     }
 
     .header-zone-selector select:focus {
       border-color: var(--primary);
     }
 
-    /* Barra de Control de Fecha (MEJORA M1) */
+    /* M1: Barra de Control de Fecha */
     .date-control-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 10px 14px;
+      padding: 10px 12px;
       margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       box-shadow: var(--shadow-sm);
     }
 
     .date-control-info {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      gap: 6px;
+      font-size: 12.5px;
       font-weight: 600;
       color: #334155;
+      white-space: nowrap;
     }
 
     .date-control-inputs {
       display: flex;
       align-items: center;
       gap: 6px;
+      min-width: 0;
     }
 
     .date-input-field {
       border: 1.5px solid var(--border);
       border-radius: 8px;
-      padding: 5px 8px;
+      padding: 6px 8px;
       font-size: 12px;
       font-weight: 600;
       color: #1e293b;
       background: #f8fafc;
       outline: none;
       cursor: pointer;
+      min-height: 36px;
+      max-width: 130px;
     }
 
     .date-input-field:focus {
@@ -202,21 +237,25 @@
       color: var(--primary-dark);
       font-size: 11px;
       font-weight: 700;
-      padding: 5px 9px;
+      padding: 6px 10px;
       border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.15s ease;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
     }
 
     .btn-today:active {
       background: var(--primary-light);
     }
 
-    /* MEJORA M1: AVISO VISUAL DESTACADO EN AMARILLO/NARANJA (DÍA ANTERIOR) */
+    /* M1: AVISO VISUAL DESTACADO EN AMARILLO/NARANJA (DÍA ANTERIOR) */
     .alert-banner {
       border-radius: var(--radius);
-      padding: 18px 20px;
+      padding: 16px;
       margin-bottom: 16px;
       position: relative;
       overflow: hidden;
@@ -249,7 +288,7 @@
       background: var(--alert-today-bg);
       border: 2.5px solid var(--alert-today-border);
       color: var(--alert-today-text);
-      box-shadow: 0 10px 20px -3px rgba(16, 185, 129, 0.2);
+      box-shadow: 0 8px 18px -3px rgba(16, 185, 129, 0.2);
     }
 
     /* Variante: Días Faltantes Normales (Pizarra suave) */
@@ -262,11 +301,11 @@
     .alert-header {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
+      gap: 12px;
     }
 
     .alert-icon-wrap {
-      font-size: 32px;
+      font-size: 30px;
       line-height: 1;
       flex-shrink: 0;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
@@ -274,20 +313,20 @@
 
     .alert-content {
       flex: 1;
+      min-width: 0;
     }
 
-    /* Badge Superior con Pulso Animado */
     .alert-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      padding: 4px 10px;
+      padding: 4px 9px;
       border-radius: 999px;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
@@ -307,8 +346,8 @@
     }
 
     .pulsing-beacon {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #ffffff;
       box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
@@ -331,29 +370,29 @@
     }
 
     .alert-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       line-height: 1.25;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       letter-spacing: -0.3px;
     }
 
     .alert-desc {
-      font-size: 14px;
+      font-size: 13.5px;
       line-height: 1.45;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       opacity: 0.95;
     }
 
     .alert-action-pill {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 12.5px;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 700;
       color: #9a3412;
       backdrop-filter: blur(4px);
@@ -369,9 +408,15 @@
       background: var(--card-bg);
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      padding: 18px;
+      padding: 16px;
       margin-bottom: 16px;
       box-shadow: var(--shadow-sm);
+    }
+
+    @media (min-width: 400px) {
+      .card {
+        padding: 18px;
+      }
     }
 
     .card-title {
@@ -384,28 +429,102 @@
       margin-bottom: 12px;
     }
 
-    /* Formularios */
+    /* M4: CAJA DE ALERTA DE ERROR ACCESIBLE EN ROJO */
+    .error-alert-box {
+      background: var(--danger-light);
+      border: 1.5px solid var(--danger-border);
+      color: var(--danger-dark);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 2px 5px rgba(220, 38, 38, 0.08);
+      animation: shakeIn 0.3s ease-in-out;
+    }
+
+    @keyframes shakeIn {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    .error-icon {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .error-content {
+      flex: 1;
+    }
+
+    .error-close-btn {
+      background: none;
+      border: none;
+      color: var(--danger-dark);
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 0 4px;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    .error-close-btn:hover {
+      opacity: 1;
+    }
+
+    /* M4: Formulario y Contador de Caracteres */
     .form-group {
       margin-bottom: 14px;
     }
 
+    .form-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
     .form-label {
-      display: block;
       font-size: 13px;
       font-weight: 600;
       color: #334155;
-      margin-bottom: 5px;
+    }
+
+    .char-counter {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+    }
+
+    .char-counter.warning {
+      color: #d97706;
+      font-weight: 700;
+    }
+
+    .char-counter.limit {
+      color: var(--danger);
+      font-weight: 800;
     }
 
     .form-control {
       width: 100%;
-      padding: 10px 12px;
+      padding: 11px 12px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       font-size: 14px;
       color: var(--text);
       background: #ffffff;
       outline: none;
+      min-height: 44px; /* Ergonomía táctil para una mano */
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
@@ -414,31 +533,54 @@
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
     }
 
-    textarea.form-control {
-      resize: vertical;
-      min-height: 80px;
+    .form-control.input-error {
+      border-color: var(--danger);
+      background: #fff8f8;
     }
 
-    /* Selector de Días de la Semana */
+    textarea.form-control {
+      resize: vertical;
+      min-height: 85px;
+      line-height: 1.4;
+    }
+
+    /* M3: Selector de Días de la Semana fluido desde 320px */
     .days-picker {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
+      gap: 3px;
       margin-top: 4px;
+    }
+
+    @media (min-width: 380px) {
+      .days-picker {
+        gap: 5px;
+      }
     }
 
     .day-btn {
       background: #f1f5f9;
       border: 1.5px solid var(--border);
       border-radius: 8px;
-      padding: 9px 2px;
-      font-size: 12px;
+      padding: 10px 1px;
+      font-size: 11px;
       font-weight: 700;
       color: #475569;
       cursor: pointer;
       text-align: center;
       transition: all 0.15s ease;
       user-select: none;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 380px) {
+      .day-btn {
+        font-size: 12px;
+        padding: 9px 2px;
+      }
     }
 
     .day-btn.selected {
@@ -448,13 +590,13 @@
       box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
     }
 
-    /* Botones */
+    /* M3 & M4: Botones con Ergonomía Táctil (Mínimo 44px de altura) */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 11px 18px;
+      padding: 12px 18px;
       font-size: 14px;
       font-weight: 700;
       border-radius: var(--radius-sm);
@@ -462,10 +604,17 @@
       cursor: pointer;
       transition: all 0.15s ease;
       width: 100%;
+      min-height: 46px; /* Cómodo para usar con una mano */
     }
 
-    .btn:active {
+    .btn:active:not(:disabled) {
       transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none !important;
     }
 
     .btn-primary {
@@ -474,7 +623,7 @@
       box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background: var(--primary-dark);
     }
 
@@ -482,6 +631,7 @@
       background: transparent;
       border: 1.5px solid var(--border);
       color: var(--text-muted);
+      min-height: 38px;
     }
 
     .btn-outline:hover {
@@ -493,14 +643,15 @@
       background: var(--danger-light);
       color: var(--danger);
       font-size: 12px;
-      padding: 5px 10px;
+      padding: 6px 10px;
       border-radius: 6px;
       border: none;
       cursor: pointer;
       font-weight: 700;
+      min-height: 32px;
     }
 
-    /* Área de Fotos y Pruebas Ficticias */
+    /* Área de Fotos */
     .photo-upload-area {
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius-sm);
@@ -509,6 +660,7 @@
       background: #f8fafc;
       cursor: pointer;
       transition: border-color 0.2s;
+      min-height: 60px;
     }
 
     .photo-upload-area:hover {
@@ -539,14 +691,18 @@
       color: white;
       border: none;
       border-radius: 50%;
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       cursor: pointer;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .quick-sample-photos {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
       margin-top: 8px;
     }
@@ -555,15 +711,75 @@
       font-size: 11px;
       background: #e2e8f0;
       color: #334155;
-      padding: 5px 9px;
+      padding: 6px 10px;
       border-radius: 6px;
       cursor: pointer;
       border: none;
       font-weight: 600;
+      min-height: 32px;
     }
 
     .sample-pill:hover {
       background: #cbd5e1;
+    }
+
+    /* M3: ESTADO VACÍO AMIGABLE PARA REPORTES */
+    .empty-state-card {
+      background: #ffffff;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: var(--radius);
+      padding: 32px 18px;
+      text-align: center;
+      color: #334155;
+      box-shadow: var(--shadow-sm);
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .empty-state-icon {
+      font-size: 44px;
+      margin-bottom: 12px;
+      display: inline-block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+    }
+
+    .empty-state-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #065f46;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .empty-state-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-create-first {
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 11px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+      transition: all 0.15s ease;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+
+    .btn-create-first:active {
+      transform: scale(0.97);
     }
 
     /* Lista de Reportes */
@@ -586,17 +802,18 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 8px;
     }
 
     .report-location {
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #1e293b;
       display: flex;
       align-items: center;
       gap: 6px;
+      word-break: break-word;
     }
 
     .report-status {
@@ -607,6 +824,7 @@
       background: #fee2e2;
       color: #b91c1c;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .report-status.resolved {
@@ -618,6 +836,8 @@
       font-size: 13px;
       color: #475569;
       margin-bottom: 10px;
+      word-break: break-word;
+      line-height: 1.4;
     }
 
     .report-img {
@@ -632,6 +852,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
       font-size: 11.5px;
       color: var(--text-muted);
       border-top: 1px solid #f1f5f9;
@@ -654,6 +876,7 @@
       border-radius: var(--radius-sm);
       background: #ffffff;
       transition: all 0.2s;
+      gap: 8px;
     }
 
     .zone-item.active-zone {
@@ -661,21 +884,27 @@
       background: var(--primary-subtle);
     }
 
+    .zone-info {
+      min-width: 0;
+    }
+
     .zone-info h4 {
       font-size: 14px;
       font-weight: 700;
       color: #0f172a;
+      word-break: break-word;
     }
 
     .zone-info p {
       font-size: 12px;
       color: var(--text-muted);
+      word-break: break-word;
     }
 
     .zone-badges {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 3px;
       margin-top: 4px;
     }
 
@@ -688,7 +917,7 @@
       font-weight: 600;
     }
 
-    /* Barra de Navegación Inferior (Estilo Móvil) */
+    /* M3: Barra de Navegación Inferior Móvil ergonómica para dedo pulgar */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -698,27 +927,30 @@
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-around;
-      padding: 8px 12px;
+      padding: 6px 8px;
       z-index: 100;
       max-width: 520px;
       margin: 0 auto;
-      box-shadow: 0 -3px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 -3px 12px rgba(0,0,0,0.06);
     }
 
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 3px;
       background: none;
       border: none;
       color: #94a3b8;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 8px;
       transition: color 0.15s;
+      min-height: 48px; /* Target táctil óptimo */
+      flex: 1;
     }
 
     .nav-item.active {
@@ -726,7 +958,7 @@
     }
 
     .nav-icon {
-      font-size: 20px;
+      font-size: 21px;
       line-height: 1;
     }
 
@@ -763,23 +995,14 @@
       transition: all 0.25s ease;
       z-index: 200;
       white-space: nowrap;
+      max-width: 90vw;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 26px 16px;
-      color: var(--text-muted);
-    }
-
-    .empty-icon {
-      font-size: 36px;
-      margin-bottom: 8px;
-      opacity: 0.6;
     }
   </style>
 </head>
@@ -790,7 +1013,7 @@
     <div class="header-content">
       <div class="brand">
         <div class="brand-icon">🚛</div>
-        <div>
+        <div class="brand-text">
           <h1 class="brand-title">BASURA CERO</h1>
           <span class="brand-subtitle">Alcaldía & Comunidad</span>
         </div>
@@ -805,10 +1028,10 @@
     </div>
   </header>
 
-  <!-- Contenedor Principal de la Aplicación -->
+  <!-- Contenedor Principal de la Aplicación (Responsive 320px+) -->
   <main class="app-container">
 
-    <!-- MEJORA M1: BARRA DE SELECCIÓN DE FECHA CON VERIFICACIÓN AUTOMÁTICA -->
+    <!-- M1: BARRA DE SELECCIÓN DE FECHA CON VERIFICACIÓN AUTOMÁTICA -->
     <div class="date-control-card">
       <div class="date-control-info">
         <span>📅</span>
@@ -820,7 +1043,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 1: ALERTAS Y HORARIOS (MEJORA M1) -->
+    <!-- SECCIÓN 1: ALERTAS Y HORARIOS (M1) -->
     <section id="viewAlerts" class="view-section active">
       
       <!-- CONTENEDOR DE LA ALERTA VISUAL:
@@ -841,9 +1064,9 @@
           <!-- Renderizado dinámico -->
         </div>
 
-        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <span style="font-size: 12px; color: var(--text-muted);">¿Querés agregar o modificar rutas?</span>
-          <button type="button" class="btn-outline" style="padding: 5px 10px; font-size: 12px; border-radius: 6px; cursor:pointer;" onclick="switchTab('zones')">
+          <button type="button" class="btn-outline" style="padding: 6px 12px; font-size: 12px; border-radius: 6px; cursor:pointer;" onclick="switchTab('zones')">
             + Administrar Zonas
           </button>
         </div>
@@ -862,34 +1085,45 @@
         </div>
       </div>
 
-      <!-- Panel de Control de Datos Locales (MEJORA M2) -->
-      <div style="text-align: center; margin-top: 10px;">
-        <button type="button" id="btnResetMockupData" style="background: none; border: none; font-size: 11px; color: #94a3b8; text-decoration: underline; cursor: pointer;">
+      <!-- Control de Datos Locales (M2) -->
+      <div style="text-align: center; margin-top: 8px; margin-bottom: 8px;">
+        <button type="button" id="btnResetMockupData" style="background: none; border: none; font-size: 11px; color: #94a3b8; text-decoration: underline; cursor: pointer; padding: 4px;">
           Restablecer datos de ejemplo (Mockup)
         </button>
       </div>
 
     </section>
 
-    <!-- SECCIÓN 2: FORMULARIO Y LISTA DE REPORTES (FUNCIÓN 3) -->
+    <!-- SECCIÓN 2: FORMULARIO Y LISTA DE REPORTES (M3 + M4) -->
     <section id="viewReports" class="view-section">
       
-      <div class="card">
+      <div class="card" id="reportFormCard">
         <div class="card-title">
           <span>📢</span>
           <span>Reportar Punto de Basura Fuera de Horario</span>
         </div>
         <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
-          Reportá esquinas sucias o acumulación indebida para que la unidad ambiental programe el retiro.
+          Notificá esquinas sucias o acumulación indebida para que la cuadrilla ambiental programe el retiro.
         </p>
 
-        <form id="reportForm">
-          <!-- Ubicación -->
+        <!-- M4: Caja de alerta de error en rojo accesible dentro de pantalla -->
+        <div id="formErrorBox" class="error-alert-box" style="display: none;" role="alert">
+          <span class="error-icon">⚠️</span>
+          <div class="error-content" id="formErrorMessage">
+            Por favor completa los campos requeridos.
+          </div>
+          <button type="button" class="error-close-btn" onclick="dismissFormError()" title="Cerrar aviso">✕</button>
+        </div>
+
+        <form id="reportForm" novalidate>
+          <!-- M4: Ubicación con validación estricta -->
           <div class="form-group">
-            <label class="form-label" for="reportLocation">Ubicación exacta del punto *</label>
+            <div class="form-label-row">
+              <label class="form-label" for="reportLocation">Ubicación exacta del punto *</label>
+            </div>
             <div style="display: flex; gap: 6px;">
-              <input type="text" id="reportLocation" class="form-control" placeholder="Ej: 3ra Calle Poniente frente a la tienda escolar" required />
-              <button type="button" id="btnGeo" title="Asignar punto de prueba o GPS" style="padding: 0 10px; background: #e2e8f0; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">
+              <input type="text" id="reportLocation" class="form-control" placeholder="Ej: 3ra Calle Poniente frente a la farmacia" />
+              <button type="button" id="btnGeo" title="Asignar punto de prueba o GPS" style="padding: 0 12px; background: #e2e8f0; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; min-height: 44px; flex-shrink: 0;">
                 📍
               </button>
             </div>
@@ -897,24 +1131,31 @@
 
           <!-- Zona -->
           <div class="form-group">
-            <label class="form-label" for="reportZoneSelect">Zona / Sector *</label>
-            <select id="reportZoneSelect" class="form-control" required>
+            <div class="form-label-row">
+              <label class="form-label" for="reportZoneSelect">Zona / Sector *</label>
+            </div>
+            <select id="reportZoneSelect" class="form-control">
               <!-- Llenado dinámico -->
             </select>
           </div>
 
-          <!-- Descripción -->
+          <!-- M4: Descripción con límite de 200 caracteres y contador en tiempo real -->
           <div class="form-group">
-            <label class="form-label" for="reportDescription">Descripción del problema *</label>
-            <textarea id="reportDescription" class="form-control" placeholder="Describe qué tipo de desechos hay (bolsas rotas, escombros, ramas, etc.)..." required></textarea>
+            <div class="form-label-row">
+              <label class="form-label" for="reportDescription">Descripción del problema *</label>
+              <span id="charCountBadge" class="char-counter">0 / 200</span>
+            </div>
+            <textarea id="reportDescription" class="form-control" maxlength="200" placeholder="Describe qué tipo de desechos hay (bolsas rotas, escombros, ramas, etc.)..."></textarea>
           </div>
 
           <!-- Foto real o muestra ficticia -->
           <div class="form-group">
-            <label class="form-label">Foto de evidencia (foto real o muestra)</label>
+            <div class="form-label-row">
+              <label class="form-label">Foto de evidencia (foto real o muestra)</label>
+            </div>
             
             <div class="photo-upload-area" id="dropArea" onclick="document.getElementById('reportPhotoInput').click()">
-              <div style="font-size: 26px; margin-bottom: 4px;">📷</div>
+              <div style="font-size: 26px; margin-bottom: 2px;">📷</div>
               <div style="font-size: 13px; font-weight: 600; color: #334155;">Toca para cargar foto o usar cámara</div>
               <div style="font-size: 11px; color: #94a3b8;">Formatos JPG, PNG o muestras rápidas abajo</div>
             </div>
@@ -940,6 +1181,7 @@
             </div>
           </div>
 
+          <!-- M4: Botón de envío con prevención de doble clic y feedback de guardado -->
           <button type="submit" class="btn btn-primary" id="btnSubmitReport">
             <span>🚀</span>
             <span>Registrar y Enviar Reporte</span>
@@ -947,7 +1189,7 @@
         </form>
       </div>
 
-      <!-- Listado de Reportes Guardados (Persistencia M2) -->
+      <!-- Listado de Reportes Guardados (M3: Con Estado Vacío) -->
       <div style="margin-top: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <h3 style="font-size: 14px; font-weight: 700; color: #334155;">Reportes Comunitarios Registrados</h3>
@@ -955,7 +1197,7 @@
         </div>
 
         <div id="reportsList" class="reports-list">
-          <!-- Renderizado dinámico desde localStorage -->
+          <!-- Renderizado dinámico desde localStorage o M3 Estado Vacío -->
         </div>
       </div>
 
@@ -974,16 +1216,29 @@
           Especifica los días y hora de recolección para que los vecinos reciban las alertas del día anterior.
         </p>
 
-        <form id="zoneForm">
+        <!-- Caja de error para zonas -->
+        <div id="zoneErrorBox" class="error-alert-box" style="display: none;" role="alert">
+          <span class="error-icon">⚠️</span>
+          <div class="error-content" id="zoneErrorMessage">
+            Por favor ingresa el nombre de la zona y al menos un día de recolección.
+          </div>
+          <button type="button" class="error-close-btn" onclick="dismissZoneError()" title="Cerrar aviso">✕</button>
+        </div>
+
+        <form id="zoneForm" novalidate>
           <!-- Nombre de la Zona -->
           <div class="form-group">
-            <label class="form-label" for="zoneName">Nombre de la Zona, Colonia o Barrio *</label>
-            <input type="text" id="zoneName" class="form-control" placeholder="Ej: Colonia Los Robles / Sector 4" required />
+            <div class="form-label-row">
+              <label class="form-label" for="zoneName">Nombre de la Zona, Colonia o Barrio *</label>
+            </div>
+            <input type="text" id="zoneName" class="form-control" placeholder="Ej: Colonia Los Robles / Sector 4" />
           </div>
 
-          <!-- Selección interactiva de Días -->
+          <!-- Selección interactiva de Días (Fluido 320px) -->
           <div class="form-group">
-            <label class="form-label">Días de paso del tren de aseo *</label>
+            <div class="form-label-row">
+              <label class="form-label">Días de paso del tren de aseo *</label>
+            </div>
             <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Selecciona los días correspondientes:</p>
             <div class="days-picker" id="daysPicker">
               <button type="button" class="day-btn" data-day="1">Lun</button>
@@ -994,29 +1249,33 @@
               <button type="button" class="day-btn" data-day="6">Sáb</button>
               <button type="button" class="day-btn" data-day="0">Dom</button>
             </div>
-            <input type="hidden" id="selectedDaysInput" required />
+            <input type="hidden" id="selectedDaysInput" />
           </div>
 
           <!-- Hora estimada de paso -->
           <div class="form-group">
-            <label class="form-label" for="zoneTime">Hora habitual de paso *</label>
-            <input type="time" id="zoneTime" class="form-control" value="07:00" required />
+            <div class="form-label-row">
+              <label class="form-label" for="zoneTime">Hora habitual de paso *</label>
+            </div>
+            <input type="time" id="zoneTime" class="form-control" value="07:00" />
           </div>
 
           <!-- Recomendación opcional -->
           <div class="form-group">
-            <label class="form-label" for="zoneNotes">Observaciones o turno (opcional)</label>
+            <div class="form-label-row">
+              <label class="form-label" for="zoneNotes">Observaciones o turno (opcional)</label>
+            </div>
             <input type="text" id="zoneNotes" class="form-control" placeholder="Ej: Ruta matutina - Sacar bolsas antes de las 6:30 AM" />
           </div>
 
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" id="btnSubmitZone">
             <span>💾</span>
             <span>Guardar Horario en el Sistema</span>
           </button>
         </form>
       </div>
 
-      <!-- Lista de Zonas Guardadas (Persistencia M2) -->
+      <!-- Lista de Zonas Guardadas (M2) -->
       <div class="card">
         <div class="card-title">
           <span>📋</span>
@@ -1031,7 +1290,7 @@
 
   </main>
 
-  <!-- Barra de Navegación Inferior Móvil -->
+  <!-- M3: Barra de Navegación Inferior Móvil ergonómica para dedo pulgar -->
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('alerts')" id="navAlerts">
       <span class="nav-icon">🔔</span>
@@ -1055,16 +1314,17 @@
     /**
      * =========================================================================
      * BASURA CERO - SISTEMA MUNICIPAL Y COMUNITARIO
-     * Cumplimiento de MEJORA M1 (Avisos automáticos) y MEJORA M2 (Persistencia)
+     * M1: Avisos preventivos del día anterior
+     * M2: Persistencia en localStorage con Mockup
+     * M3: Responsive 320px+ con Estado Vacío amigable
+     * M4: Validaciones estrictas, límite 200 caracteres y caja de error roja
      * =========================================================================
      */
 
-    // Nombres y siglas en español de los días de la semana
     const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const DAY_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-    // Muestras SVG livianas para fotos ficticias
     const SAMPLE_PHOTOS = {
       bolsas: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23fee2e2"/><ellipse cx="140" cy="130" rx="45" ry="50" fill="%231e293b"/><ellipse cx="210" cy="120" rx="55" ry="60" fill="%230f172a"/><ellipse cx="280" cy="140" rx="40" ry="45" fill="%23334155"/><path d="M120,80 Q140,60 160,80" stroke="%23f87171" stroke-width="4" fill="none"/><text x="200" y="175" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: BOLSAS FUERA DE HORARIO</text></svg>',
       escombros: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23cbd5e1"/><polygon points="60,180 140,70 210,180" fill="%2364748b"/><polygon points="180,180 260,90 340,180" fill="%23475569"/><circle cx="200" cy="50" r="20" fill="%23f59e0b"/><text x="200" y="165" font-family="sans-serif" font-weight="bold" font-size="15" fill="%23ffffff" text-anchor="middle">REPORTE: ESCOMBROS EN ACERA</text></svg>',
@@ -1072,11 +1332,9 @@
     };
 
     // =========================================================================
-    // MEJORA M2: DATOS DE EJEMPLO (MOCKUP) PARA CUANDO LOCALSTORAGE ESTÁ VACÍO
+    // M2: MOCKUPS INICIALES
     // =========================================================================
     function getMockupZones() {
-      // Calculamos dinámicamente el día de mañana para que al abrir la app SIEMPRE haya una zona activa
-      // con recolección programada para mañana, garantizando la visualización de la MEJORA M1 de inmediato.
       const today = new Date().getDay();
       const tomorrow = (today + 1) % 7;
       const dayAfterTomorrow = (today + 2) % 7;
@@ -1085,7 +1343,7 @@
         {
           id: 'zona-casco-urbano',
           name: 'Zona 1 - Casco Central y Mercado',
-          days: [tomorrow, (tomorrow + 3) % 7], // Incluye explícitamente mañana
+          days: [tomorrow, (tomorrow + 3) % 7], // Incluye mañana
           time: '06:30',
           notes: 'Ruta prioritaria - Sacar antes de las 6:00 AM'
         },
@@ -1099,7 +1357,7 @@
         {
           id: 'zona-barrio-el-calvario',
           name: 'Zona 3 - Barrio El Calvario',
-          days: [1, 3, 5], // Lunes, Miércoles, Viernes
+          days: [1, 3, 5],
           time: '14:00',
           notes: 'Ruta vespertina'
         }
@@ -1138,61 +1396,44 @@
       zones: [],
       reports: [],
       activeZoneId: '',
-      consultDate: new Date(), // Fecha actual o seleccionada por el usuario
+      consultDate: new Date(),
       selectedPhotoData: null
     };
 
-    // =========================================================================
-    // MEJORA M2: GESTIÓN Y PERSISTENCIA ROBUSTA EN LOCALSTORAGE
-    // =========================================================================
     const STORAGE_KEY_ZONES = 'basura_cero_zonas_data';
     const STORAGE_KEY_REPORTS = 'basura_cero_reportes_data';
     const STORAGE_KEY_ACTIVE_ZONE = 'basura_cero_active_zone_id';
 
     function loadLocalStorageData() {
-      // 1. Cargar Zonas o inicializar Mockup si está vacío
       try {
         const rawZones = localStorage.getItem(STORAGE_KEY_ZONES);
         if (rawZones) {
           const parsed = JSON.parse(rawZones);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            appState.zones = parsed;
-          } else {
-            appState.zones = getMockupZones();
-            saveZonesToStorage();
-          }
+          appState.zones = (Array.isArray(parsed) && parsed.length > 0) ? parsed : getMockupZones();
         } else {
           appState.zones = getMockupZones();
           saveZonesToStorage();
         }
-      } catch (err) {
-        console.warn('Error al leer zonas de localStorage, cargando mockup:', err);
+      } catch (e) {
         appState.zones = getMockupZones();
         saveZonesToStorage();
       }
 
-      // 2. Cargar Reportes o inicializar Mockup si está vacío
       try {
         const rawReports = localStorage.getItem(STORAGE_KEY_REPORTS);
         if (rawReports) {
           const parsed = JSON.parse(rawReports);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            appState.reports = parsed;
-          } else {
-            appState.reports = getMockupReports();
-            saveReportsToStorage();
-          }
+          // Permitir array vacío explícito si el usuario borró todos los reportes para probar el estado vacío
+          appState.reports = Array.isArray(parsed) ? parsed : getMockupReports();
         } else {
           appState.reports = getMockupReports();
           saveReportsToStorage();
         }
-      } catch (err) {
-        console.warn('Error al leer reportes de localStorage, cargando mockup:', err);
+      } catch (e) {
         appState.reports = getMockupReports();
         saveReportsToStorage();
       }
 
-      // 3. Cargar Zona Activa
       const savedActiveZone = localStorage.getItem(STORAGE_KEY_ACTIVE_ZONE);
       if (savedActiveZone && appState.zones.some(z => z.id === savedActiveZone)) {
         appState.activeZoneId = savedActiveZone;
@@ -1205,58 +1446,43 @@
     function saveZonesToStorage() {
       try {
         localStorage.setItem(STORAGE_KEY_ZONES, JSON.stringify(appState.zones));
-      } catch (e) {
-        console.error('Error guardando zonas en localStorage:', e);
-      }
+      } catch (e) {}
     }
 
     function saveReportsToStorage() {
       try {
         localStorage.setItem(STORAGE_KEY_REPORTS, JSON.stringify(appState.reports));
-      } catch (e) {
-        console.error('Error guardando reportes en localStorage:', e);
-      }
+      } catch (e) {}
     }
 
     // =========================================================================
-    // MEJORA M1: VERIFICACIÓN AUTOMÁTICA DEL DÍA ANTERIOR AL ABRIR O CAMBIAR FECHA
+    // M1: EVALUACIÓN DE ALERTAS PREVENTIVAS
     // =========================================================================
-
-    /**
-     * Calcula la relación entre la fecha seleccionada y los días del tren de aseo.
-     * Retorna si mañana pasa el tren, si hoy pasa el tren, o la fecha más próxima.
-     */
     function evaluateZoneSchedule(zoneDays, referenceDate) {
       if (!zoneDays || zoneDays.length === 0) {
         return { isTomorrow: false, isToday: false, daysUntil: 0, nextDayName: null, tomorrowDateStr: '' };
       }
 
-      // Día de la semana de la fecha de referencia (0 = Domingo ... 6 = Sábado)
       const currentDayOfWeek = referenceDate.getDay();
-
-      // Mañana es el día de referencia + 1
       const tomorrowDate = new Date(referenceDate);
       tomorrowDate.setDate(tomorrowDate.getDate() + 1);
       const tomorrowDayOfWeek = tomorrowDate.getDay();
 
-      // Verificación directa: ¿El tren pasa mañana en esta zona?
       const isTomorrow = zoneDays.includes(tomorrowDayOfWeek);
       const isToday = zoneDays.includes(currentDayOfWeek);
 
-      // Calcular cuántos días faltan para la próxima pasada
       let minDiff = 8;
       let nextDayOfWeek = null;
 
       zoneDays.forEach(day => {
         let diff = (day - currentDayOfWeek + 7) % 7;
-        if (diff === 0) diff = 7; // Si es hoy, la próxima vuelta es en 7 días
+        if (diff === 0) diff = 7;
         if (diff < minDiff) {
           minDiff = diff;
           nextDayOfWeek = day;
         }
       });
 
-      // Cadena formateada para la fecha de mañana
       const tomorrowFormatted = `${DAY_NAMES[tomorrowDayOfWeek]}, ${tomorrowDate.getDate()} de ${MONTH_NAMES[tomorrowDate.getMonth()]}`;
 
       return {
@@ -1269,10 +1495,6 @@
       };
     }
 
-    /**
-     * MEJORA M1: Despliega el aviso visual destacado en amarillo/naranja
-     * cada vez que se abre la app o se selecciona la fecha / zona.
-     */
     function renderAlertBanner() {
       const container = document.getElementById('alertContainer');
       const activeZone = appState.zones.find(z => z.id === appState.activeZoneId);
@@ -1295,9 +1517,6 @@
       const evalResult = evaluateZoneSchedule(activeZone.days, appState.consultDate);
       const formattedTime = formatTime12h(activeZone.time);
 
-      // =======================================================================
-      // CASO M1: ¡MAÑANA PASA EL TREN DE ASEO! (Aviso destacado en amarillo/naranja)
-      // =======================================================================
       if (evalResult.isTomorrow) {
         container.innerHTML = `
           <div class="alert-banner alert-warning" role="alert">
@@ -1325,9 +1544,7 @@
             </div>
           </div>
         `;
-      }
-      // CASO 2: ¡HOY ES DÍA DE RECOLECCIÓN!
-      else if (evalResult.isToday) {
+      } else if (evalResult.isToday) {
         container.innerHTML = `
           <div class="alert-banner alert-today" role="alert">
             <div class="alert-header">
@@ -1346,9 +1563,7 @@
             </div>
           </div>
         `;
-      }
-      // CASO 3: FALTAN 2 O MÁS DÍAS
-      else {
+      } else {
         container.innerHTML = `
           <div class="alert-banner alert-info" role="status">
             <div class="alert-header">
@@ -1365,7 +1580,6 @@
         `;
       }
 
-      // Renderizar resumen informativo de la zona
       renderZoneSummary(activeZone, formattedTime);
     }
 
@@ -1380,93 +1594,340 @@
         .join(' ');
 
       summaryContainer.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-          <div>
-            <h3 style="font-size:15px; font-weight:700; color:#0f172a;">${escapeHtml(activeZone.name)}</h3>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:8px;">
+          <div style="min-width:0;">
+            <h3 style="font-size:15px; font-weight:700; color:#0f172a; word-break:break-word;">${escapeHtml(activeZone.name)}</h3>
             <p style="font-size:12.5px; color:#64748b; margin-top:2px;">${escapeHtml(activeZone.notes || 'Ruta regular')}</p>
           </div>
-          <div style="text-align:right;">
+          <div style="text-align:right; flex-shrink:0;">
             <div style="font-size:15px; font-weight:800; color:#059669;">${formattedTime}</div>
             <div style="font-size:11px; color:#94a3b8;">Hora habitual</div>
           </div>
         </div>
         <div>
           <div style="font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Días de recolección en esta zona:</div>
-          <div style="display:flex; flex-wrap:wrap; gap:6px;">${daysChips}</div>
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">${daysChips}</div>
         </div>
       `;
     }
 
     // =========================================================================
-    // INICIALIZACIÓN DE LA APLICACIÓN
+    // M4: CONTROL DE ERRORES Y VALIDACIONES DEL FORMULARIO DE REPORTES
     // =========================================================================
-    function initApp() {
-      // 1. Cargar persistencia con localStorage o mockup
-      loadLocalStorageData();
+    function showFormError(message, targetElementId = null) {
+      const errorBox = document.getElementById('formErrorBox');
+      const errorMessage = document.getElementById('formErrorMessage');
+      
+      errorMessage.textContent = message;
+      errorBox.style.display = 'flex';
+      
+      // Resaltar campo con borde rojo
+      if (targetElementId) {
+        const input = document.getElementById(targetElementId);
+        if (input) {
+          input.classList.add('input-error');
+          input.focus();
+        }
+      }
 
-      // 2. Inicializar selector de fecha con HOY (MEJORA M1)
-      setupDateControl();
-
-      // 3. Vincular formularios y eventos
-      setupEventListeners();
-
-      // 4. Renderizar selectores, alertas y listados
-      renderZoneSelectDropdowns();
-      renderAlertBanner();
-      renderReportsList();
-      renderZonesManagementList();
+      errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+    window.dismissFormError = function() {
+      const errorBox = document.getElementById('formErrorBox');
+      errorBox.style.display = 'none';
+      document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    };
+
+    function showZoneError(message) {
+      const errorBox = document.getElementById('zoneErrorBox');
+      const errorMessage = document.getElementById('zoneErrorMessage');
+      errorMessage.textContent = message;
+      errorBox.style.display = 'flex';
+      errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    window.dismissZoneError = function() {
+      document.getElementById('zoneErrorBox').style.display = 'none';
+    };
+
     /**
-     * Configuración del control de fecha (MEJORA M1)
+     * M4: Contador en tiempo real para descripción (máximo 200 caracteres)
      */
-    function setupDateControl() {
-      const datePicker = document.getElementById('dateConsultPicker');
-      const btnToday = document.getElementById('btnSetTodayDate');
+    function setupCharCounter() {
+      const descInput = document.getElementById('reportDescription');
+      const countBadge = document.getElementById('charCountBadge');
 
-      // Formato YYYY-MM-DD para el input type="date"
-      const now = new Date();
-      datePicker.value = formatDateForInput(now);
-      appState.consultDate = now;
+      descInput.addEventListener('input', () => {
+        dismissFormError();
+        const currentLength = descInput.value.length;
+        countBadge.textContent = `${currentLength} / 200`;
 
-      // Evento al cambiar la fecha en el calendario
-      datePicker.addEventListener('change', (e) => {
-        if (e.target.value) {
-          // Parsear fecha local sin desfase de zona horaria
-          const [year, month, day] = e.target.value.split('-').map(Number);
-          appState.consultDate = new Date(year, month - 1, day);
-          renderAlertBanner();
-          showToast(`Fecha de consulta actualizada: ${DAY_NAMES[appState.consultDate.getDay()]}`);
+        if (currentLength >= 200) {
+          countBadge.className = 'char-counter limit';
+        } else if (currentLength >= 170) {
+          countBadge.className = 'char-counter warning';
+        } else {
+          countBadge.className = 'char-counter';
+        }
+      });
+    }
+
+    function setupReportForm() {
+      const reportForm = document.getElementById('reportForm');
+      const photoInput = document.getElementById('reportPhotoInput');
+      const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+      const btnGeo = document.getElementById('btnGeo');
+      const btnSubmit = document.getElementById('btnSubmitReport');
+      const locationInput = document.getElementById('reportLocation');
+
+      locationInput.addEventListener('input', () => {
+        locationInput.classList.remove('input-error');
+        dismissFormError();
+      });
+
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            setPhotoPreview(evt.target.result);
+          };
+          reader.readAsDataURL(file);
         }
       });
 
-      // Botón rápido para volver al día de hoy
-      btnToday.addEventListener('click', () => {
-        const today = new Date();
-        datePicker.value = formatDateForInput(today);
-        appState.consultDate = today;
-        renderAlertBanner();
-        showToast('Consultando día de hoy');
+      btnRemovePhoto.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearPhotoPreview();
+      });
+
+      btnGeo.addEventListener('click', () => {
+        locationInput.classList.remove('input-error');
+        dismissFormError();
+
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const coords = `Coord: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+              locationInput.value = coords;
+              showToast('Ubicación capturada por GPS');
+            },
+            () => {
+              locationInput.value = 'Calle Principal frente a Plaza Comunitaria';
+              showToast('Ubicación de referencia asignada');
+            },
+            { timeout: 3000 }
+          );
+        } else {
+          locationInput.value = 'Calle Principal frente a Plaza Comunitaria';
+          showToast('Ubicación de referencia asignada');
+        }
+      });
+
+      // M4: Envío con validaciones estrictas y protección de doble clic
+      reportForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        dismissFormError();
+
+        const location = locationInput.value.trim();
+        const zoneSelect = document.getElementById('reportZoneSelect');
+        const zoneId = zoneSelect.value;
+        const zoneName = zoneSelect.options[zoneSelect.selectedIndex]?.text || 'Zona General';
+        const descInput = document.getElementById('reportDescription');
+        const description = descInput.value.trim();
+
+        // Validación M4: No permitir ubicación vacía
+        if (!location) {
+          showFormError('Por favor ingresa la ubicación exacta del punto crítico.', 'reportLocation');
+          return;
+        }
+
+        // Validación M4: No permitir descripción vacía
+        if (!description) {
+          showFormError('Por favor ingresa una breve descripción del problema de acumulación.', 'reportDescription');
+          return;
+        }
+
+        // Validación M4: Longitud máxima de 200 caracteres
+        if (description.length > 200) {
+          showFormError('La descripción excede el límite permitido de 200 caracteres.', 'reportDescription');
+          return;
+        }
+
+        // M4: Desactivar botón temporalmente para prevenir doble clic
+        btnSubmit.disabled = true;
+        const originalBtnHtml = btnSubmit.innerHTML;
+        btnSubmit.innerHTML = '<span>⏳</span><span>Guardando reporte...</span>';
+
+        const photoToSave = appState.selectedPhotoData || SAMPLE_PHOTOS.bolsas;
+
+        const newReport = {
+          id: 'rep-' + Date.now(),
+          location,
+          zoneId,
+          zoneName,
+          description,
+          photo: photoToSave,
+          status: 'pending',
+          timestamp: new Date().toISOString()
+        };
+
+        // Simular guardado asíncrono limpio
+        setTimeout(() => {
+          appState.reports.unshift(newReport);
+          saveReportsToStorage();
+
+          reportForm.reset();
+          clearPhotoPreview();
+          document.getElementById('charCountBadge').textContent = '0 / 200';
+          document.getElementById('charCountBadge').className = 'char-counter';
+
+          renderReportsList();
+          showToast('¡Reporte comunitario guardado con éxito!');
+
+          // Restaurar botón de envío
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = originalBtnHtml;
+
+          document.getElementById('reportsList').scrollIntoView({ behavior: 'smooth' });
+        }, 350);
       });
     }
 
-    function formatDateForInput(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+    function setSamplePhoto(type) {
+      if (SAMPLE_PHOTOS[type]) {
+        setPhotoPreview(SAMPLE_PHOTOS[type]);
+        showToast(`Foto de muestra (${type}) seleccionada`);
+      }
+    }
+
+    function setPhotoPreview(dataUrl) {
+      appState.selectedPhotoData = dataUrl;
+      const previewContainer = document.getElementById('photoPreviewContainer');
+      const previewImg = document.getElementById('previewImg');
+      previewImg.src = dataUrl;
+      previewContainer.style.display = 'block';
+    }
+
+    function clearPhotoPreview() {
+      appState.selectedPhotoData = null;
+      document.getElementById('reportPhotoInput').value = '';
+      document.getElementById('photoPreviewContainer').style.display = 'none';
+      document.getElementById('previewImg').src = '';
     }
 
     // =========================================================================
-    // REGISTRO DE ZONAS (FUNCIÓN 1)
+    // M3: LISTADO DE REPORTES CON ESTADO VACÍO AMIGABLE
+    // =========================================================================
+    function renderReportsList() {
+      const container = document.getElementById('reportsList');
+      const badge = document.getElementById('reportsCountBadge');
+      if (!container) return;
+
+      badge.textContent = appState.reports.length;
+
+      // M3: Estado Vacío Amigable Exacto
+      if (appState.reports.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state-card" role="region" aria-label="Sin reportes">
+            <div class="empty-state-icon">🌱✨</div>
+            <h4 class="empty-state-title">No hay reportes de basura comunitarios. ¡Tu zona está limpia!</h4>
+            <p class="empty-state-subtitle">Si detectas una esquina con bolsas rotas o acumulación fuera de horario, crea un aviso comunitario.</p>
+            <button type="button" class="btn-create-first" onclick="focusReportForm()">
+              <span>📸</span>
+              <span>Crear primer reporte</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = appState.reports.map(rep => {
+        const isResolved = rep.status === 'resolved';
+        const formattedDate = formatRelativeTime(rep.timestamp);
+
+        return `
+          <div class="report-card" id="${rep.id}">
+            <div class="report-top">
+              <div class="report-location">
+                <span>📍</span>
+                <span>${escapeHtml(rep.location)}</span>
+              </div>
+              <span class="report-status ${isResolved ? 'resolved' : ''}">
+                ${isResolved ? '✅ Limpiado' : '⏳ Pendiente'}
+              </span>
+            </div>
+            
+            <p class="report-desc">${escapeHtml(rep.description)}</p>
+            
+            ${rep.photo ? `<img src="${rep.photo}" alt="Evidencia del punto de basura" class="report-img" />` : ''}
+
+            <div class="report-footer">
+              <div>
+                <span>🏷️ ${escapeHtml(rep.zoneName || 'Zona')}</span> • <span>${formattedDate}</span>
+              </div>
+              <div style="display:flex; gap:6px;">
+                ${!isResolved ? `
+                  <button type="button" class="btn-outline" style="font-size:11px; padding:4px 8px; border-radius:6px; cursor:pointer;" onclick="markReportResolved('${rep.id}')">
+                    Marcar Limpio
+                  </button>
+                ` : ''}
+                <button type="button" class="btn-danger" onclick="deleteReport('${rep.id}')" title="Eliminar reporte">
+                  ✕ Borrar
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // M3: Acción para crear primer reporte desde el estado vacío
+    window.focusReportForm = function() {
+      const locationInput = document.getElementById('reportLocation');
+      const formCard = document.getElementById('reportFormCard');
+      if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth' });
+      }
+      setTimeout(() => {
+        if (locationInput) locationInput.focus();
+      }, 300);
+    };
+
+    function markReportResolved(reportId) {
+      const rep = appState.reports.find(r => r.id === reportId);
+      if (rep) {
+        rep.status = 'resolved';
+        saveReportsToStorage();
+        renderReportsList();
+        showToast('Reporte marcado como limpio');
+      }
+    }
+
+    function deleteReport(reportId) {
+      appState.reports = appState.reports.filter(r => r.id !== reportId);
+      saveReportsToStorage();
+      renderReportsList();
+      showToast('Reporte eliminado');
+    }
+
+    // =========================================================================
+    // REGISTRO DE ZONAS
     // =========================================================================
     function setupZoneRegistration() {
       const zoneForm = document.getElementById('zoneForm');
       const daysButtons = document.querySelectorAll('#daysPicker .day-btn');
+      const zoneNameInput = document.getElementById('zoneName');
       let selectedDays = [];
+
+      zoneNameInput.addEventListener('input', () => {
+        dismissZoneError();
+      });
 
       daysButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+          dismissZoneError();
           const dayNum = parseInt(btn.dataset.day, 10);
           if (selectedDays.includes(dayNum)) {
             selectedDays = selectedDays.filter(d => d !== dayNum);
@@ -1481,20 +1942,25 @@
 
       zoneForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        dismissZoneError();
 
-        const name = document.getElementById('zoneName').value.trim();
+        const name = zoneNameInput.value.trim();
         const time = document.getElementById('zoneTime').value;
         const notes = document.getElementById('zoneNotes').value.trim();
 
-        if (selectedDays.length === 0) {
-          showToast('Selecciona al menos un día de la semana');
+        if (!name) {
+          showZoneError('Por favor ingresa el nombre de la zona, colonia o barrio.');
+          zoneNameInput.focus();
           return;
         }
 
-        if (!name || !time) {
-          showToast('Completa el nombre y la hora');
+        if (selectedDays.length === 0) {
+          showZoneError('Por favor selecciona al menos un día de la semana para el tren de aseo.');
           return;
         }
+
+        const btnSubmitZone = document.getElementById('btnSubmitZone');
+        btnSubmitZone.disabled = true;
 
         const newZone = {
           id: 'zona-' + Date.now(),
@@ -1504,25 +1970,25 @@
           notes
         };
 
-        // Guardar en el estado y en localStorage (MEJORA M2)
         appState.zones.push(newZone);
         appState.activeZoneId = newZone.id;
         localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, newZone.id);
         saveZonesToStorage();
 
-        // Limpiar formulario
         zoneForm.reset();
         selectedDays = [];
         daysButtons.forEach(btn => btn.classList.remove('selected'));
         document.getElementById('selectedDaysInput').value = '';
 
-        // Actualizar vistas
         renderZoneSelectDropdowns();
         renderAlertBanner();
         renderZonesManagementList();
 
-        showToast(`¡Zona "${name}" guardada con éxito!`);
-        switchTab('alerts');
+        setTimeout(() => {
+          btnSubmitZone.disabled = false;
+          showToast(`¡Zona "${name}" guardada con éxito!`);
+          switchTab('alerts');
+        }, 200);
       });
     }
 
@@ -1531,7 +1997,7 @@
       if (!container) return;
 
       if (appState.zones.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📍</div><p>No hay zonas registradas.</p></div>';
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:#64748b; font-size:13px;">No hay zonas registradas.</div>';
         return;
       }
 
@@ -1589,192 +2055,41 @@
     }
 
     // =========================================================================
-    // REPORTES COMUNITARIOS DE BASURA (FUNCIÓN 3)
+    // INICIALIZACIÓN Y EVENTOS GENERALES
     // =========================================================================
-    function setupReportForm() {
-      const reportForm = document.getElementById('reportForm');
-      const photoInput = document.getElementById('reportPhotoInput');
-      const btnRemovePhoto = document.getElementById('btnRemovePhoto');
-      const btnGeo = document.getElementById('btnGeo');
+    function setupDateControl() {
+      const datePicker = document.getElementById('dateConsultPicker');
+      const btnToday = document.getElementById('btnSetTodayDate');
 
-      photoInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            setPhotoPreview(evt.target.result);
-          };
-          reader.readAsDataURL(file);
+      const now = new Date();
+      datePicker.value = formatDateForInput(now);
+      appState.consultDate = now;
+
+      datePicker.addEventListener('change', (e) => {
+        if (e.target.value) {
+          const [year, month, day] = e.target.value.split('-').map(Number);
+          appState.consultDate = new Date(year, month - 1, day);
+          renderAlertBanner();
+          showToast(`Consultando: ${DAY_NAMES[appState.consultDate.getDay()]}`);
         }
       });
 
-      btnRemovePhoto.addEventListener('click', (e) => {
-        e.stopPropagation();
-        clearPhotoPreview();
-      });
-
-      btnGeo.addEventListener('click', () => {
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            (pos) => {
-              const coords = `Coord: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
-              document.getElementById('reportLocation').value = coords;
-              showToast('Ubicación capturada');
-            },
-            () => {
-              document.getElementById('reportLocation').value = 'Calle Municipal frente a Escuela San Martín';
-              showToast('Ubicación asignada');
-            },
-            { timeout: 3000 }
-          );
-        } else {
-          document.getElementById('reportLocation').value = 'Calle Municipal frente a Escuela San Martín';
-          showToast('Ubicación asignada');
-        }
-      });
-
-      reportForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const location = document.getElementById('reportLocation').value.trim();
-        const zoneSelect = document.getElementById('reportZoneSelect');
-        const zoneId = zoneSelect.value;
-        const zoneName = zoneSelect.options[zoneSelect.selectedIndex]?.text || 'Zona General';
-        const description = document.getElementById('reportDescription').value.trim();
-
-        if (!location || !description) {
-          showToast('Completa la ubicación y descripción');
-          return;
-        }
-
-        const photoToSave = appState.selectedPhotoData || SAMPLE_PHOTOS.bolsas;
-
-        const newReport = {
-          id: 'rep-' + Date.now(),
-          location,
-          zoneId,
-          zoneName,
-          description,
-          photo: photoToSave,
-          status: 'pending',
-          timestamp: new Date().toISOString()
-        };
-
-        // Guardar reporte en el estado y en localStorage (MEJORA M2)
-        appState.reports.unshift(newReport);
-        saveReportsToStorage();
-
-        // Resetear formulario
-        reportForm.reset();
-        clearPhotoPreview();
-
-        renderReportsList();
-        showToast('¡Reporte guardado y enviado a la alcaldía!');
-
-        document.getElementById('reportsList').scrollIntoView({ behavior: 'smooth' });
+      btnToday.addEventListener('click', () => {
+        const today = new Date();
+        datePicker.value = formatDateForInput(today);
+        appState.consultDate = today;
+        renderAlertBanner();
+        showToast('Consultando día de hoy');
       });
     }
 
-    function setSamplePhoto(type) {
-      if (SAMPLE_PHOTOS[type]) {
-        setPhotoPreview(SAMPLE_PHOTOS[type]);
-        showToast(`Foto de muestra (${type}) seleccionada`);
-      }
+    function formatDateForInput(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     }
 
-    function setPhotoPreview(dataUrl) {
-      appState.selectedPhotoData = dataUrl;
-      const previewContainer = document.getElementById('photoPreviewContainer');
-      const previewImg = document.getElementById('previewImg');
-      previewImg.src = dataUrl;
-      previewContainer.style.display = 'block';
-    }
-
-    function clearPhotoPreview() {
-      appState.selectedPhotoData = null;
-      document.getElementById('reportPhotoInput').value = '';
-      document.getElementById('photoPreviewContainer').style.display = 'none';
-      document.getElementById('previewImg').src = '';
-    }
-
-    function renderReportsList() {
-      const container = document.getElementById('reportsList');
-      const badge = document.getElementById('reportsCountBadge');
-      if (!container) return;
-
-      badge.textContent = appState.reports.length;
-
-      if (appState.reports.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">✨</div>
-            <p style="font-weight:600;">No hay reportes de basura pendientes.</p>
-            <p style="font-size:12px;">¡Las calles de tu comunidad están limpias!</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = appState.reports.map(rep => {
-        const isResolved = rep.status === 'resolved';
-        const formattedDate = formatRelativeTime(rep.timestamp);
-
-        return `
-          <div class="report-card" id="${rep.id}">
-            <div class="report-top">
-              <div class="report-location">
-                <span>📍</span>
-                <span>${escapeHtml(rep.location)}</span>
-              </div>
-              <span class="report-status ${isResolved ? 'resolved' : ''}">
-                ${isResolved ? '✅ Limpiado' : '⏳ Pendiente'}
-              </span>
-            </div>
-            
-            <p class="report-desc">${escapeHtml(rep.description)}</p>
-            
-            ${rep.photo ? `<img src="${rep.photo}" alt="Evidencia del punto de basura" class="report-img" />` : ''}
-
-            <div class="report-footer">
-              <div>
-                <span>🏷️ ${escapeHtml(rep.zoneName || 'Zona')}</span> • <span>${formattedDate}</span>
-              </div>
-              <div style="display:flex; gap:6px;">
-                ${!isResolved ? `
-                  <button type="button" class="btn-outline" style="font-size:11px; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="markReportResolved('${rep.id}')">
-                    Marcar Limpio
-                  </button>
-                ` : ''}
-                <button type="button" class="btn-danger" style="padding:2px 6px; font-size:11px;" onclick="deleteReport('${rep.id}')" title="Eliminar reporte">
-                  ✕
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function markReportResolved(reportId) {
-      const rep = appState.reports.find(r => r.id === reportId);
-      if (rep) {
-        rep.status = 'resolved';
-        saveReportsToStorage();
-        renderReportsList();
-        showToast('Reporte marcado como limpio');
-      }
-    }
-
-    function deleteReport(reportId) {
-      appState.reports = appState.reports.filter(r => r.id !== reportId);
-      saveReportsToStorage();
-      renderReportsList();
-      showToast('Reporte eliminado');
-    }
-
-    // =========================================================================
-    // SELECTORES DE ZONA Y NAVEGACIÓN
-    // =========================================================================
     function renderZoneSelectDropdowns() {
       const headerSelect = document.getElementById('activeZoneSelect');
       const formSelect = document.getElementById('reportZoneSelect');
@@ -1811,7 +2126,6 @@
     };
 
     function setupEventListeners() {
-      // Cambio de zona activa en la cabecera
       document.getElementById('activeZoneSelect').addEventListener('change', (e) => {
         appState.activeZoneId = e.target.value;
         localStorage.setItem(STORAGE_KEY_ACTIVE_ZONE, appState.activeZoneId);
@@ -1820,7 +2134,6 @@
         showToast('Zona actualizada');
       });
 
-      // Botón para restablecer datos de ejemplo (MEJORA M2)
       document.getElementById('btnResetMockupData').addEventListener('click', () => {
         if (confirm('¿Deseas restablecer los datos de ejemplo iniciales (Mockup)?')) {
           localStorage.removeItem(STORAGE_KEY_ZONES);
@@ -1835,20 +2148,19 @@
         }
       });
 
+      setupDateControl();
+      setupCharCounter();
       setupZoneRegistration();
       setupReportForm();
     }
 
-    // =========================================================================
-    // UTILIDADES GENERALES
-    // =========================================================================
     function showToast(message) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.classList.add('show');
       setTimeout(() => {
         toast.classList.remove('show');
-      }, 2600);
+      }, 2500);
     }
 
     function formatTime12h(timeStr) {
@@ -1887,7 +2199,15 @@
       return String(text).replace(/[&<>"']/g, m => map[m]);
     }
 
-    // Arranque de la app
+    function initApp() {
+      loadLocalStorageData();
+      setupEventListeners();
+      renderZoneSelectDropdowns();
+      renderAlertBanner();
+      renderReportsList();
+      renderZonesManagementList();
+    }
+
     document.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
