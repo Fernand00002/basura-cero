@@ -737,6 +737,7 @@
       width: 100%;
       height: 160px;
       object-fit: cover;
+      border-radius: 8px;
       display: block;
     }
 
@@ -1329,21 +1330,21 @@
             
             <input type="file" id="reportPhotoInput" accept="image/*" style="display: none;" />
 
-            <!-- Alternativa de muestra ficticia -->
+            <!-- Alternativa de foto de muestra real -->
             <div style="margin-top: 8px;">
               <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O seleccionar foto de prueba:</span>
+                <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O seleccionar foto real de prueba:</span>
               </div>
               <div class="quick-sample-photos">
-                <button type="button" class="sample-pill" onclick="setSamplePhoto('bolsas')">🗑️ Bolsas acumuladas</button>
-                <button type="button" class="sample-pill" onclick="setSamplePhoto('escombros')">🏗️ Escombros</button>
-                <button type="button" class="sample-pill" onclick="setSamplePhoto('poda')">🌿 Restos de poda</button>
+                <button type="button" class="sample-pill" onclick="setSamplePhoto('bolsas')">🗑️ Bolsas en calle</button>
+                <button type="button" class="sample-pill" onclick="setSamplePhoto('reciclaje')">♻️ Contenedor reciclaje</button>
+                <button type="button" class="sample-pill" onclick="setSamplePhoto('camion')">🚛 Camión recolector</button>
               </div>
             </div>
 
             <!-- Vista previa de foto -->
             <div class="photo-preview" id="photoPreviewContainer">
-              <img id="previewImg" src="" alt="Vista previa del reporte" onerror="this.style.display='none';" />
+              <img id="previewImg" src="" alt="Vista previa del reporte" onerror="this.src='https://images.unsplash.com/photo-1604186837056-8e7c286766f2?auto=format&fit=crop&w=600&q=80'" />
               <button type="button" class="remove-photo" id="btnRemovePhoto" title="Quitar imagen">✕</button>
             </div>
           </div>
@@ -1493,14 +1494,20 @@
     const DAY_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-    // Placeholder por defecto seguro sin comillas dobles en atributos
-    const DEFAULT_PLACEHOLDER_PHOTO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='200' y='105' font-family='sans-serif' font-weight='bold' font-size='15' fill='%2364748b' text-anchor='middle'%3E%F0%9F%93%B7 Sin foto adjunta%3C/text%3E%3C/svg%3E";
-
-    // Muestras SVG seguras (URL codificadas con comillas simples para evitar romper atributos HTML)
-    const SAMPLE_PHOTOS = {
-      bolsas: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23fee2e2'/%3E%3Cellipse cx='140' cy='130' rx='45' ry='50' fill='%231e293b'/%3E%3Cellipse cx='210' cy='120' rx='55' ry='60' fill='%230f172a'/%3E%3Cellipse cx='280' cy='140' rx='40' ry='45' fill='%23334155'/%3E%3Cpath d='M120,80 Q140,60 160,80' stroke='%23f87171' stroke-width='4' fill='none'/%3E%3Ctext x='200' y='175' font-family='sans-serif' font-weight='bold' font-size='15' fill='%23ffffff' text-anchor='middle'%3EREPORTE: BOLSAS FUERA DE HORARIO%3C/text%3E%3C/svg%3E",
-      escombros: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23cbd5e1'/%3E%3Cpolygon points='60,180 140,70 210,180' fill='%2364748b'/%3E%3Cpolygon points='180,180 260,90 340,180' fill='%23475569'/%3E%3Ccircle cx='200' cy='50' r='20' fill='%23f59e0b'/%3E%3Ctext x='200' y='165' font-family='sans-serif' font-weight='bold' font-size='15' fill='%23ffffff' text-anchor='middle'%3EREPORTE: ESCOMBROS EN ACERA%3C/text%3E%3C/svg%3E",
-      poda: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23dcfce7'/%3E%3Cellipse cx='200' cy='120' rx='90' ry='60' fill='%2315803d'/%3E%3Cpath d='M140,150 L120,180 M200,160 L200,190 M260,150 L280,180' stroke='%2378350f' stroke-width='6'/%3E%3Ctext x='200' y='165' font-family='sans-serif' font-weight='bold' font-size='15' fill='%23ffffff' text-anchor='middle'%3EREPORTE: RESTOS DE PODA%3C/text%3E%3C/svg%3E"
+    // =========================================================================
+    // IMÁGENES REALES DE ALTA CALIDAD (UNSPLASH)
+    // =========================================================================
+    const REAL_PHOTOS = {
+      // Foto real por defecto para reportes ciudadanos sin foto adjunta (bolsas/desechos en acera)
+      default: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80',
+      // Bolsas de basura acumuladas en la calle
+      bolsas: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=600&q=80',
+      // Contenedores de reciclaje y residuos urbanos desbordados
+      reciclaje: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=600&q=80',
+      // Camión recolector de aseo municipal
+      camion: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?auto=format&fit=crop&w=600&q=80',
+      // Respaldo global anti-roturas requerido
+      fallback: 'https://images.unsplash.com/photo-1604186837056-8e7c286766f2?auto=format&fit=crop&w=600&q=80'
     };
 
     // =========================================================================
@@ -1544,7 +1551,7 @@
           zoneId: 'zona-casco-urbano',
           zoneName: 'Zona 1 - Casco Central y Mercado',
           description: 'Acumulación de varias bolsas de desecho en la esquina junto al poste de luz fuera del horario del tren de aseo.',
-          photo: SAMPLE_PHOTOS.bolsas,
+          photo: REAL_PHOTOS.bolsas,
           status: 'pending',
           timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
           aiAnalysis: {
@@ -1557,13 +1564,27 @@
           location: 'Avenida Las Palmeras, frente al pasaje 3',
           zoneId: 'zona-colonia-san-jose',
           zoneName: 'Zona 2 - Colonia San José',
-          description: 'Escombros y restos de construcción dejados en la cuneta obstruyendo el paso del agua.',
-          photo: SAMPLE_PHOTOS.escombros,
+          description: 'Contenedor público de reciclaje y residuos desbordado en acera peatonal con basura esparcida.',
+          photo: REAL_PHOTOS.reciclaje,
           status: 'resolved',
-          timestamp: new Date(Date.now() - 3600000 * 20).toISOString(),
+          timestamp: new Date(Date.now() - 3600000 * 18).toISOString(),
           aiAnalysis: {
             prioridad: 'Media',
-            recomendacion: 'Programar cuadrilla de escombros y desobstrucción de cuneta con equipo adecuado.'
+            recomendacion: 'Programar vaciado y limpieza de contenedores con cuadrilla de barrido de calles.'
+          }
+        },
+        {
+          id: 'rep-mock-3',
+          location: 'Calle El Calvario y 5ta Avenida Sur',
+          zoneId: 'zona-barrio-el-calvario',
+          zoneName: 'Zona 3 - Barrio El Calvario',
+          description: 'Paso y apoyo de tren de aseo municipal para despeje integral de punto de acopio vecinal.',
+          photo: REAL_PHOTOS.camion,
+          status: 'pending',
+          timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
+          aiAnalysis: {
+            prioridad: 'Media',
+            recomendacion: 'Coordinar con la cuadrilla del camión recolector para adelantar la pasada 30 minutos.'
           }
         }
       ];
@@ -1586,11 +1607,12 @@
     const STORAGE_KEY_ACTIVE_ZONE = 'basura_cero_active_zone_id';
     const STORAGE_KEY_GEMINI_KEY = 'basura_cero_gemini_api_key';
 
-    function sanitizeStoredPhoto(photo) {
-      if (!photo || typeof photo !== 'string') return DEFAULT_PLACEHOLDER_PHOTO;
-      // Corrige datos previos si contenían comillas dobles sin escapar que rompían la etiqueta img
-      if (photo.startsWith('data:image/svg+xml;utf8,<svg')) {
-        return photo.replace(/"/g, "'");
+    function sanitizeStoredPhoto(photo, repId) {
+      if (!photo || typeof photo !== 'string' || photo.trim() === '' || photo.startsWith('data:image/svg+xml')) {
+        if (repId === 'rep-mock-1') return REAL_PHOTOS.bolsas;
+        if (repId === 'rep-mock-2') return REAL_PHOTOS.reciclaje;
+        if (repId === 'rep-mock-3') return REAL_PHOTOS.camion;
+        return REAL_PHOTOS.default;
       }
       return photo;
     }
@@ -1615,13 +1637,15 @@
         if (rawReports) {
           const parsed = JSON.parse(rawReports);
           if (Array.isArray(parsed)) {
-            // Limpiar y asegurar que las fotos no tengan comillas problemáticas
+            // Actualizar fotos previas a fotos reales si eran vectores o estaban vacías
             appState.reports = parsed.map(rep => {
-              if (rep.photo) rep.photo = sanitizeStoredPhoto(rep.photo);
+              rep.photo = sanitizeStoredPhoto(rep.photo, rep.id);
               return rep;
             });
+            saveReportsToStorage();
           } else {
             appState.reports = getMockupReports();
+            saveReportsToStorage();
           }
         } else {
           appState.reports = getMockupReports();
@@ -2098,7 +2122,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         const originalBtnHtml = btnSubmit.innerHTML;
         btnSubmit.innerHTML = '<span>🤖</span><span>Analizando con IA y guardando...</span>';
 
-        const photoToSave = appState.selectedPhotoData || SAMPLE_PHOTOS.bolsas;
+        const photoToSave = appState.selectedPhotoData || REAL_PHOTOS.default;
 
         // M5: Triaje con Gemini 2.5 Flash
         let aiResult;
@@ -2142,9 +2166,14 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
     }
 
     function setSamplePhoto(type) {
-      if (SAMPLE_PHOTOS[type]) {
-        setPhotoPreview(SAMPLE_PHOTOS[type]);
-        showToast(`Foto de muestra (${type}) seleccionada`);
+      if (REAL_PHOTOS[type]) {
+        setPhotoPreview(REAL_PHOTOS[type]);
+        const labels = {
+          bolsas: 'Bolsas en calle',
+          reciclaje: 'Contenedor desbordado',
+          camion: 'Camión recolector'
+        };
+        showToast(`Foto real (${labels[type] || type}) seleccionada`);
       }
     }
 
@@ -2180,8 +2209,8 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
      * Sanitiza la URL o Data URI de la foto para prevenir errores de sintaxis HTML
      */
     function getSafePhotoSrc(photo) {
-      if (!photo || typeof photo !== 'string' || photo.trim() === '') {
-        return DEFAULT_PLACEHOLDER_PHOTO;
+      if (!photo || typeof photo !== 'string' || photo.trim() === '' || photo.startsWith('data:image/svg+xml')) {
+        return REAL_PHOTOS.default;
       }
       let cleaned = photo.trim();
       // Si contiene comillas dobles que romperían src="...", cambiarlas a comillas simples
@@ -2241,8 +2270,8 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
             
             <p class="report-desc">${escapeHtml(rep.description)}</p>
             
-            <!-- Imagen con placeholder por defecto o se oculta si la URL falla -->
-            <img src="${safePhotoUrl}" alt="Evidencia del punto de basura" class="report-img" loading="lazy" onerror="this.style.display='none'" />
+            <!-- Imagen con foto real, object-fit cover, borde redondeado y directiva onerror requerida -->
+            <img src="${safePhotoUrl}" alt="Evidencia del punto de basura" class="report-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1604186837056-8e7c286766f2?auto=format&fit=crop&w=600&q=80'" />
 
             <!-- M5: Sello de IA con etiqueta visual de prioridad y recomendación -->
             <div class="report-ai-badge-row">
