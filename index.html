@@ -988,6 +988,159 @@
       font-weight: 700;
     }
 
+    /* =========================================================================
+       GUÍA DE COLORES DE BASUREROS POR MATERIAL (PLÁSTICO, PAPEL, VIDRIO, OTRO)
+       ========================================================================= */
+    .report-recycling-card {
+      margin: 8px 0 10px 0;
+      padding: 9px 11px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .recycling-card-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: #334155;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .recycling-pills-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .bin-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.35;
+      flex-wrap: wrap;
+    }
+
+    .bin-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bin-pill-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    /* 🟡 AMARILLO: Plástico */
+    .bin-amarillo {
+      background: #fefce8;
+      color: #713f12;
+      border: 1.5px solid #eab308;
+    }
+    .bin-amarillo .bin-pill-tag {
+      background: #facc15;
+      color: #713f12;
+    }
+
+    /* 🔵 AZUL: Papel y Cartón */
+    .bin-azul {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #3b82f6;
+    }
+    .bin-azul .bin-pill-tag {
+      background: #60a5fa;
+      color: white;
+    }
+
+    /* 🟢 VERDE: Vidrio */
+    .bin-verde {
+      background: #f0fdf4;
+      color: #14532d;
+      border: 1.5px solid #22c55e;
+    }
+    .bin-verde .bin-pill-tag {
+      background: #4ade80;
+      color: #064e3b;
+    }
+
+    /* ⚫ NEGRO / GRIS: Otro / Desecho ordinario */
+    .bin-negro {
+      background: #f8fafc;
+      color: #0f172a;
+      border: 1.5px solid #64748b;
+    }
+    .bin-negro .bin-pill-tag {
+      background: #334155;
+      color: white;
+    }
+
+    /* 🟤 MARRÓN: Orgánico / Poda */
+    .bin-marron {
+      background: #fffbeb;
+      color: #78350f;
+      border: 1.5px solid #f59e0b;
+    }
+    .bin-marron .bin-pill-tag {
+      background: #b45309;
+      color: white;
+    }
+
+    /* Hint en vivo en el formulario de reporte */
+    .recycling-live-hint {
+      margin-top: 8px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      font-size: 12px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .material-quick-chips {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .material-chip {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+
+    .material-chip:hover, .material-chip:active {
+      background: #e2e8f0;
+      transform: scale(0.97);
+    }
+
     .report-footer {
       display: flex;
       align-items: center;
@@ -1307,13 +1460,25 @@
             </select>
           </div>
 
-          <!-- M4: Descripción con límite de 200 caracteres y contador en tiempo real -->
+          <!-- M4: Descripción con límite de 200 caracteres, contador y detector de basurero por color -->
           <div class="form-group">
             <div class="form-label-row">
               <label class="form-label" for="reportDescription">Descripción del problema *</label>
               <span id="charCountBadge" class="char-counter">0 / 200</span>
             </div>
-            <textarea id="reportDescription" class="form-control" maxlength="200" placeholder="Describe qué tipo de desechos hay (bolsas rotas, escombros, ramas, etc.)..."></textarea>
+            <textarea id="reportDescription" class="form-control" maxlength="200" placeholder="Describe qué tipo de desechos hay (plástico, papel, vidrio u otros materiales)..."></textarea>
+            
+            <!-- Atajos rápidos para insertar materiales comunes -->
+            <div class="material-quick-chips">
+              <span style="font-size: 10.5px; color: var(--text-muted); font-weight: 700;">Material:</span>
+              <button type="button" class="material-chip" onclick="addMaterialTag('plástico')">🟡 Plástico</button>
+              <button type="button" class="material-chip" onclick="addMaterialTag('papel')">🔵 Papel</button>
+              <button type="button" class="material-chip" onclick="addMaterialTag('vidrio')">🟢 Vidrio</button>
+              <button type="button" class="material-chip" onclick="addMaterialTag('otro')">⚫ Otro</button>
+            </div>
+
+            <!-- Indicador en vivo de color de basurero según palabras clave en descripción -->
+            <div id="liveRecyclingHint" class="recycling-live-hint" style="display: none;"></div>
           </div>
 
           <!-- Foto real o muestra ficticia -->
@@ -1550,13 +1715,13 @@
           location: '4ta Calle Poniente y 1ra Avenida Norte',
           zoneId: 'zona-casco-urbano',
           zoneName: 'Zona 1 - Casco Central y Mercado',
-          description: 'Acumulación de varias bolsas de desecho en la esquina junto al poste de luz fuera del horario del tren de aseo.',
+          description: 'Acumulación de varias bolsas de plastico y envases en la esquina junto al poste de luz fuera del horario del tren de aseo.',
           photo: REAL_PHOTOS.bolsas,
           status: 'pending',
           timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
           aiAnalysis: {
             prioridad: 'Alta',
-            recomendacion: 'Despachar camión recolector de apoyo en el turno de la tarde para evitar dispersión por animales callejeros.'
+            recomendacion: 'Despachar camión recolector de apoyo en el turno de la tarde. Depositar botellas y bolsas plásticas en el basurero Amarillo.'
           }
         },
         {
@@ -1564,13 +1729,13 @@
           location: 'Avenida Las Palmeras, frente al pasaje 3',
           zoneId: 'zona-colonia-san-jose',
           zoneName: 'Zona 2 - Colonia San José',
-          description: 'Contenedor público de reciclaje y residuos desbordado en acera peatonal con basura esparcida.',
+          description: 'Contenedor público de reciclaje desbordado con cajas de papel, carton y botellas de vidrio en la acera.',
           photo: REAL_PHOTOS.reciclaje,
           status: 'resolved',
           timestamp: new Date(Date.now() - 3600000 * 18).toISOString(),
           aiAnalysis: {
             prioridad: 'Media',
-            recomendacion: 'Programar vaciado y limpieza de contenedores con cuadrilla de barrido de calles.'
+            recomendacion: 'Programar cuadrilla de barrido. Separar: papel y cartón al basurero Azul, botellas de vidrio al basurero Verde.'
           }
         },
         {
@@ -1578,13 +1743,13 @@
           location: 'Calle El Calvario y 5ta Avenida Sur',
           zoneId: 'zona-barrio-el-calvario',
           zoneName: 'Zona 3 - Barrio El Calvario',
-          description: 'Paso y apoyo de tren de aseo municipal para despeje integral de punto de acopio vecinal.',
+          description: 'Restos de poda, escombros y otro tipo de desechos acumulados frente a la acera comunitaria.',
           photo: REAL_PHOTOS.camion,
           status: 'pending',
           timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
           aiAnalysis: {
             prioridad: 'Media',
-            recomendacion: 'Coordinar con la cuadrilla del camión recolector para adelantar la pasada 30 minutos.'
+            recomendacion: 'Recolectar restos de poda (basurero Marrón) y escombros u otro desecho no aprovechable (basurero Negro).'
           }
         }
       ];
@@ -1637,9 +1802,15 @@
         if (rawReports) {
           const parsed = JSON.parse(rawReports);
           if (Array.isArray(parsed)) {
-            // Actualizar fotos previas a fotos reales si eran vectores o estaban vacías
+            // Actualizar fotos y descripciones de mockups previos si no tenían palabras clave de reciclaje
+            const mockups = getMockupReports();
             appState.reports = parsed.map(rep => {
               rep.photo = sanitizeStoredPhoto(rep.photo, rep.id);
+              const foundMock = mockups.find(m => m.id === rep.id);
+              if (foundMock && (!rep.description.includes('plastico') && !rep.description.includes('papel') && !rep.description.includes('otro'))) {
+                rep.description = foundMock.description;
+                if (foundMock.aiAnalysis) rep.aiAnalysis = foundMock.aiAnalysis;
+              }
               return rep;
             });
             saveReportsToStorage();
@@ -1701,6 +1872,7 @@
 Tu tarea es analizar el siguiente reporte ciudadano sobre acumulación de basura fuera de horario y determinar:
 1. Nivel de prioridad según el riesgo sanitario, bloqueo de vías públicas o proliferación de plagas. Opciones permitidas: "Baja", "Media", "Alta", "Crítica".
 2. Una recomendación de acción inmediata y concisa (1 o 2 oraciones) dirigida a la unidad ambiental de la alcaldía.
+3. Si en la descripción encuentras plástico, papel, vidrio u otro tipo de residuo, incluye brevemente en la recomendación en qué color de basurero debe separarse (Amarillo para plástico, Azul para papel/cartón, Verde para vidrio, Negro/Gris para otros desechos).
 
 DATOS DEL REPORTE:
 - Ubicación: "${location}"
@@ -1979,7 +2151,59 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         } else {
           countBadge.className = 'char-counter';
         }
+
+        updateLiveRecyclingHint(descInput.value);
       });
+    }
+
+    /**
+     * Inserta una etiqueta rápida de material y activa la detección de basurero
+     */
+    window.addMaterialTag = function(material) {
+      const descInput = document.getElementById('reportDescription');
+      if (!descInput) return;
+      const current = descInput.value.trim();
+      if (current.length > 0) {
+        if (current.length + material.length + 2 <= 200) {
+          descInput.value = current + ', ' + material;
+        }
+      } else {
+        descInput.value = 'Desechos de ' + material;
+      }
+      descInput.dispatchEvent(new Event('input'));
+      descInput.focus();
+    };
+
+    /**
+     * Muestra en tiempo real qué color de basurero corresponde según lo que escribe el usuario
+     */
+    function updateLiveRecyclingHint(text) {
+      const hintEl = document.getElementById('liveRecyclingHint');
+      if (!hintEl) return;
+      const bins = getRecyclingBinsFromText(text);
+      if (bins.length === 0) {
+        hintEl.style.display = 'none';
+        hintEl.innerHTML = '';
+        return;
+      }
+      hintEl.style.display = 'block';
+      hintEl.innerHTML = `
+        <div style="font-weight: 800; color: #166534; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; display: flex; align-items: center; gap: 4px;">
+          <span>♻️</span>
+          <span>Basurero indicado para los materiales detectados:</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          ${bins.map(b => `
+            <div class="bin-pill ${b.badgeClass}">
+              <div class="bin-pill-left">
+                <span>${b.icon}</span>
+                <span><strong>${escapeHtml(b.material)}:</strong> ${escapeHtml(b.action)}</span>
+              </div>
+              <span class="bin-pill-tag">${escapeHtml(b.binColor)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
     }
 
     // =========================================================================
@@ -2154,6 +2378,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         clearPhotoPreview();
         document.getElementById('charCountBadge').textContent = '0 / 200';
         document.getElementById('charCountBadge').className = 'char-counter';
+        updateLiveRecyclingHint('');
 
         renderReportsList();
         showToast(`¡Reporte registrado con Sello de IA: Prioridad ${aiResult.prioridad}!`);
@@ -2220,6 +2445,94 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
       return cleaned;
     }
 
+    /**
+     * Identifica materiales en la descripción (plástico, papel, vidrio, otro, etc.)
+     * e indica en qué color de basurero debe ir cada uno según normas municipales.
+     */
+    function getRecyclingBinsFromText(text) {
+      if (!text || typeof text !== 'string') return [];
+      const normalized = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const results = [];
+      const addedKeys = new Set();
+
+      // 1. Plástico -> Basurero Amarillo
+      if (/\b(plastico|plasticos|botella|botellas|bolsa|bolsas|envase|envases|desechable|desechables)\b/.test(normalized) || normalized.includes('plastico')) {
+        if (!addedKeys.has('plastico')) {
+          addedKeys.add('plastico');
+          results.push({
+            material: 'Plástico',
+            binColor: 'Amarillo',
+            badgeClass: 'bin-amarillo',
+            icon: '🟡',
+            action: 'Depositar en Basurero Amarillo',
+            tip: 'Envases plásticos, botellas, bolsas limpias y empaques'
+          });
+        }
+      }
+
+      // 2. Papel / Cartón -> Basurero Azul
+      if (/\b(papel|papeles|carton|cartones|caja|cajas|periodico|periodicos|revista|revistas|hoja|hojas)\b/.test(normalized) || normalized.includes('papel') || normalized.includes('carton')) {
+        if (!addedKeys.has('papel')) {
+          addedKeys.add('papel');
+          results.push({
+            material: 'Papel y Cartón',
+            binColor: 'Azul',
+            badgeClass: 'bin-azul',
+            icon: '🔵',
+            action: 'Depositar en Basurero Azul',
+            tip: 'Papel seco, cajas de cartón desarmadas y periódicos'
+          });
+        }
+      }
+
+      // 3. Vidrio -> Basurero Verde
+      if (/\b(vidrio|vidrios|cristal|cristales|frasco|frascos)\b/.test(normalized) || normalized.includes('vidrio') || normalized.includes('cristal')) {
+        if (!addedKeys.has('vidrio')) {
+          addedKeys.add('vidrio');
+          results.push({
+            material: 'Vidrio',
+            binColor: 'Verde',
+            badgeClass: 'bin-verde',
+            icon: '🟢',
+            action: 'Depositar en Basurero Verde',
+            tip: 'Botellas y frascos de vidrio (sin tapas metálicas)'
+          });
+        }
+      }
+
+      // 4. Orgánico / Poda -> Basurero Marrón o Café
+      if (/\b(organico|organicos|comida|cascara|cascaras|poda|ramas|hojarasca|vegetal|fruta)\b/.test(normalized) || normalized.includes('organico') || normalized.includes('poda')) {
+        if (!addedKeys.has('organico')) {
+          addedKeys.add('organico');
+          results.push({
+            material: 'Orgánico / Poda',
+            binColor: 'Marrón / Café',
+            badgeClass: 'bin-marron',
+            icon: '🟤',
+            action: 'Depositar en Basurero Marrón',
+            tip: 'Cáscaras, restos de alimentos y restos de jardín/poda'
+          });
+        }
+      }
+
+      // 5. Otro / Desechos ordinarios -> Basurero Negro o Gris
+      if (/\b(otro|otros|escombro|escombros|ordinario|ordinarios|inorganico|inorganicos|no reciclable|servilleta|sucio|sanitario)\b/.test(normalized) || normalized.includes('otro')) {
+        if (!addedKeys.has('otro')) {
+          addedKeys.add('otro');
+          results.push({
+            material: 'Otro / Ordinario',
+            binColor: 'Negro / Gris',
+            badgeClass: 'bin-negro',
+            icon: '⚫',
+            action: 'Depositar en Basurero Negro',
+            tip: 'Desechos no reciclables, residuos ordinarios o escombros'
+          });
+        }
+      }
+
+      return results;
+    }
+
     function renderReportsList() {
       const container = document.getElementById('reportsList');
       const badge = document.getElementById('reportsCountBadge');
@@ -2256,6 +2569,28 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
         // Obtener URL de imagen segura sin romper atributos HTML
         const safePhotoUrl = getSafePhotoSrc(rep.photo);
 
+        // Detección de materiales y asignación de color de basurero
+        const recyclingBins = getRecyclingBinsFromText(rep.description);
+        const recyclingCardHtml = recyclingBins.length > 0 ? `
+          <div class="report-recycling-card" role="region" aria-label="Separación de residuos">
+            <div class="recycling-card-header">
+              <span>♻️</span>
+              <span>Separación en basureros de color:</span>
+            </div>
+            <div class="recycling-pills-row">
+              ${recyclingBins.map(b => `
+                <div class="bin-pill ${b.badgeClass}">
+                  <div class="bin-pill-left">
+                    <span>${b.icon}</span>
+                    <span><strong>${escapeHtml(b.material)}:</strong> ${escapeHtml(b.action)}</span>
+                  </div>
+                  <span class="bin-pill-tag">${escapeHtml(b.binColor)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : '';
+
         return `
           <div class="report-card" id="${rep.id}">
             <div class="report-top">
@@ -2270,6 +2605,8 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con este formato exa
             
             <p class="report-desc">${escapeHtml(rep.description)}</p>
             
+            ${recyclingCardHtml}
+
             <!-- Imagen con foto real, object-fit cover, borde redondeado y directiva onerror requerida -->
             <img src="${safePhotoUrl}" alt="Evidencia del punto de basura" class="report-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1604186837056-8e7c286766f2?auto=format&fit=crop&w=600&q=80'" />
 
